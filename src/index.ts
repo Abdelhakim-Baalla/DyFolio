@@ -1,10 +1,32 @@
-// src/index.ts
 import express from 'express';
 import { ApolloServer } from '@apollo/server';
-const { expressMiddleware } = require('@apollo/server/express4');
-import bodyParser from 'body-parser';
+import { expressMiddleware } from '@apollo/server/express4';
 import cors from 'cors';
 const schemaMod = require('./schema');
-const typeDefs = schemaMod.typeDefs || schemaMod.default || schemaMod;
+const typeDefs = schemaMod.typeDefs;
 const resolversMod = require('./resolvers');
-const resolvers = resolversMod.resolvers || resolversMod.default || resolversMod;
+const resolvers = resolversMod.resolvers;
+import dotenv from 'dotenv';
+dotenv.config();
+
+const PORT = process.env.PORT || 4000;
+const app = express();
+
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+});
+
+async function startServer() {
+  await server.start();
+  app.use(cors());
+  app.use(express.json());
+  app.use('/graphql', expressMiddleware(server));
+
+  // Lancement du serveur
+  app.listen(PORT, () => {
+    console.log(`Serveur en marche sur http://localhost:${PORT}/graphql`);
+  });
+}
+
+startServer();
