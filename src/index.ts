@@ -10,6 +10,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 import connectDB from './config/db';
 connectDB();
+const Models = require('./models/index');
 
 const PORT = process.env.PORT || 4000;
 const app = express();
