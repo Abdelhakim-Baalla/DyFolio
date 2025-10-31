@@ -3,6 +3,7 @@ import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
 import cors from 'cors';
 import jwtMiddleware from './middlewares/jwt';
+import authRouter from './routes/auth';
 const schemaMod = require('./schema');
 const typeDefs = schemaMod.typeDefs;
 const resolversMod = require('./resolvers');
@@ -25,6 +26,7 @@ async function startServer() {
   await server.start();
   app.use(cors());
   app.use(express.json());
+  app.use('/api/v1', authRouter);
   app.use(jwtMiddleware);
   app.use('/graphql', expressMiddleware(server, { context: async ({ req }) => ({ user: (req as any).user }), }));
 

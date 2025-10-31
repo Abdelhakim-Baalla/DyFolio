@@ -1,15 +1,11 @@
-import express from 'express';
+import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
-dotenv.config();
 
-const router = express.Router();
 const Models = require('../models');
 const Utilisateur = Models.Utilisateur;
 
-// POST /auth/register
-router.post('/register', async (req, res) => {
+const register = async (req: Request, res: Response) => {
   try {
     const { username, email, password } = req.body;
     if (!username || !email || !password) {
@@ -35,12 +31,11 @@ router.post('/register', async (req, res) => {
     return res.status(201).json({ user: { id: user._id, username: user.username, email: user.email }, token: token });
   } catch (err) {
     console.error('Erreur register:', err);
-    return res.status(500).json({ message: 'Erreur interne lors de la création de l\'utilisateur' });
+    return res.status(500).json({ message: "Erreur interne lors de la création de l'utilisateur" });
   }
-});
+};
 
-// POST /auth/login
-router.post('/login', async (req, res) => {
+const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
@@ -51,6 +46,12 @@ router.post('/login', async (req, res) => {
     if (!user) {
       return res.status(401).json({ message: 'Email ou mot de passe invalide' });
     }
+
+    const ok = await bcrypt.compare(password, user.password);
+    if (!ok) {
+      return res.status(401).json({ message: 'Email ou mot de passe invalide' });
+    }
+
     const jwtSecret = process.env.JWT_SECRET;
     if (!jwtSecret) {
       console.error('JWT secret not set');
@@ -64,7 +65,9 @@ router.post('/login', async (req, res) => {
     console.error('Erreur login:', err);
     return res.status(500).json({ message: 'Erreur interne lors de la connexion' });
   }
-});
-    
+};
 
-export default router;
+export default {
+  register,
+  login,
+};
