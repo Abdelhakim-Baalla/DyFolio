@@ -6,15 +6,17 @@ export const resolvers = {
       try {
         const Profil = Models.Profil;
 
-        const utilisateurId = context && context.utilisateur && (context.utilisateur.id || context.utilisateur._id || context.utilisateur.utilisateurId);
+        const payload = (context && (context.user || context.utilisateur)) || null;
+        const utilisateurId = payload && (payload.id || payload._id || payload.userId || payload.utilisateurId);
 
-        let profil;
-        if (utilisateurId) {
-          profil = await Profil.findOne({ utilisateur: utilisateurId }).lean();
+        if (!utilisateurId) {
+          throw new Error('Utilisateur non authentifié');
         }
 
+        const profil = await Profil.findOne({ utilisateur: utilisateurId }).lean();
+
         if (!profil) {
-          return { Message: 'Profil non trouvé' };
+          throw new Error('Profil non trouvé pour cet utilisateur');
         }
 
         return {
@@ -26,9 +28,12 @@ export const resolvers = {
           reseauxSociaux: profil.reseauxSociaux || [],
           localisation: profil.localisation || '',
         };
-      } catch (err) {
-        console.error('Erreur getProfil:', err);
-        return { nom: '', prenom: '', metier: '', bio: '' , photo: '', reseauxSociaux: [], localisation: ''};
+      } catch (err: any) {
+        console.error('Erreur getProfil:', err?.message || err);
+        if (err instanceof Error && (err.message === 'Utilisateur non authentifié' || err.message.startsWith('Profil non trouvé')) ) {
+          throw err;
+        }
+        throw new Error('Erreur interne lors de la récupération du profil');
       }
     },
   },
