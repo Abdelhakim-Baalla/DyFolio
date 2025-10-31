@@ -35,6 +35,9 @@ export const typeDefs = gql`
     prenom: String!
     metier: String!
     bio: String
+    photo: String
+    reseauxSociaux: [String!]!
+    localisation: String!
   }
 
   type Query {
