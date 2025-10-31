@@ -11,7 +11,7 @@ dotenv.config();
 import connectDB from './config/db';
 connectDB();
 const Models = require('./models/index');
-
+const { Utilisateur } = Models;
 const PORT = process.env.PORT || 4000;
 const app = express();
 
