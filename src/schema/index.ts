@@ -11,9 +11,15 @@ export const typeDefs = gql`
     competences: [Competence!]!
   }
 
+  type Categorie {
+    nom: String!
+    description: String
+  }
+
   type Competence {
     nom: String!
     niveau: Int!
+    categorie: Categorie
   }
 
   type Experience {

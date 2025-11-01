@@ -52,7 +52,7 @@ export const resolvers = {
         if (!projets || projets.length === 0) {
           return [];
         }
-        
+
         return projets.map((p: any) => ({
           titre: p.titre || '',
           description: p.description || '',
@@ -69,6 +69,36 @@ export const resolvers = {
           throw err;
         }
         throw new Error('Erreur interne lors de la récupération des projets');
+      }
+    },
+    getCompetences: async (_parent: any, _args: any, context: any) => {
+      try {
+        const Competence = Models.Competence;
+
+        const payload = (context && (context.user || context.utilisateur)) || null;
+        const utilisateurId = payload && (payload.id || payload._id || payload.userId || payload.utilisateurId);
+
+        if (!utilisateurId) {
+          throw new Error('Utilisateur non authentifié');
+        }
+
+        const competences = await Competence.find({ utilisateur: utilisateurId }).populate('categorie', 'nom').lean();
+
+        if (!competences || competences.length === 0) {
+          return [];
+        }
+
+        return competences.map((c: any) => ({
+          nom: c.nom || '',
+          niveau: typeof c.niveau === 'number' ? c.niveau : 0,
+          categorie: c.categorie && c.categorie.nom ? { nom: c.categorie.nom } : null,
+        }));
+      } catch (err: any) {
+        console.error('Erreur getCompetences:', err?.message || err);
+        if (err instanceof Error && err.message === 'Utilisateur non authentifié') {
+          throw err;
+        }
+        throw new Error('Erreur interne lors de la récupération des compétences');
       }
     },
   },
