@@ -36,5 +36,40 @@ export const resolvers = {
         throw new Error('Erreur interne lors de la récupération du profil');
       }
     },
+    getProjets: async (_parent: any, _args: any, context: any) => {
+      try {
+        const Projet = Models.Projet;
+
+        const payload = (context && (context.user || context.utilisateur)) || null;
+        const utilisateurId = payload && (payload.id || payload._id || payload.userId || payload.utilisateurId);
+
+        if (!utilisateurId) {
+          throw new Error('Utilisateur non authentifié');
+        }
+
+        const projets = await Projet.find({ utilisateur: utilisateurId }).populate('competences', 'nom').lean();
+
+        if (!projets || projets.length === 0) {
+          return [];
+        }
+        
+        return projets.map((p: any) => ({
+          titre: p.titre || '',
+          description: p.description || '',
+          image: p.image || '',
+          lienDemo: p.lienDemo || '',
+          lienCode: p.lienCode || '',
+          competences: Array.isArray(p.competences)
+            ? p.competences.map((c: any) => ({ nom: c && c.nom ? c.nom : '' }))
+            : [],
+        }));
+      } catch (err: any) {
+        console.error('Erreur getProjets:', err?.message || err);
+        if (err instanceof Error && err.message === 'Utilisateur non authentifié') {
+          throw err;
+        }
+        throw new Error('Erreur interne lors de la récupération des projets');
+      }
+    },
   },
 };

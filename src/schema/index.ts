@@ -8,6 +8,7 @@ export const typeDefs = gql`
     image: String
     lienDemo: String
     lienCode: String
+    competences: [Competence!]!
   }
 
   type Competence {
