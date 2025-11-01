@@ -1,3 +1,5 @@
+@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5MDYxNTg4NmFlMjBmMzNiYzM5YmIxNyIsImVtYWlsIjoiYWJkZWxoYWtpbWJhYWxsYTUwQGdtYWlsLmNvbSIsImlhdCI6MTc2MjAwNjQxOCwiZXhwIjoxNzYyNjExMjE4fQ.yTt-bRNnX8C2vCp9Gai6N39Vv_FuqpN0-L4kYiXoC04
+
 ### Public - getPortfolio (sans auth)
 POST http://localhost:3895/graphql
 Content-Type: application/json
@@ -8,7 +10,7 @@ Content-Type: application/json
 
 ### Authenticated - getProfil (avec Authorization header)
 POST http://localhost:3895/graphql
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5MDYxNTg4NmFlMjBmMzNiYzM5YmIxNyIsImVtYWlsIjoiYWJkZWxoYWtpbWJhYWxsYTUwQGdtYWlsLmNvbSIsImlhdCI6MTc2MjAwNjQxOCwiZXhwIjoxNzYyNjExMjE4fQ.yTt-bRNnX8C2vCp9Gai6N39Vv_FuqpN0-L4kYiXoC04
+Authorization: Bearer {{TOKEN}}
 Content-Type: application/json
 
 {
