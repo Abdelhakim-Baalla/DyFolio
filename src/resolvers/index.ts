@@ -133,5 +133,77 @@ export const resolvers = {
         throw new Error('Erreur interne lors de la récupération des expériences');
       }
     },
+    getPortfolio: async (_parent: any, _args: any, context: any) => {
+      try {
+        const Profil = Models.Profil;
+        const Projet = Models.Projet;
+        const Competence = Models.Competence;
+        const Experience = Models.Experience;
+
+        const payload = (context && (context.user || context.utilisateur)) || null;
+        const utilisateurId = payload && (payload.id || payload._id || payload.userId || payload.utilisateurId);
+
+        let profil;
+        if (utilisateurId) {
+          profil = await Profil.findOne({ utilisateur: utilisateurId }).lean();
+        }
+        
+        if (!profil) {
+          profil = await Profil.findOne({}).lean();
+        }
+
+        if (!profil) {
+          return {
+            profil: '',
+            projets: [],
+            competences: [],
+            experiences: [],
+          };
+        }
+
+        const ownerId = profil.utilisateur || utilisateurId || null;
+
+        const [projets, competences, experiences] = await Promise.all([
+          Projet.find({ utilisateur: ownerId }).populate('competences', 'nom').lean(),
+          Competence.find({ utilisateur: ownerId }).populate('categorie', 'nom').lean(),
+          Experience.find({ utilisateur: ownerId }).lean(),
+        ]);
+
+        const mappedProjets = (projets || []).map((p: any) => ({
+          titre: p.titre || '',
+          description: p.description || '',
+          image: p.image || '',
+          lienDemo: p.lienDemo || '',
+          lienCode: p.lienCode || '',
+          competences: Array.isArray(p.competences)
+            ? p.competences.map((c: any) => ({ nom: c && c.nom ? c.nom : '' }))
+            : [],
+        }));
+
+        const mappedCompetences = (competences || []).map((c: any) => ({
+          nom: c.nom || '',
+          niveau: typeof c.niveau === 'number' ? c.niveau : 0,
+          categorie: c.categorie && c.categorie.nom ? { nom: c.categorie.nom } : null,
+        }));
+
+        const mappedExperiences = (experiences || []).map((e: any) => ({
+          entreprise: e.entreprise || '',
+          poste: e.poste || '',
+          description: e.description || '',
+          dateDebut: e.dateDebut ? new Date(e.dateDebut).toISOString() : null,
+          dateFin: e.dateFin ? new Date(e.dateFin).toISOString() : null,
+        }));
+
+        return {
+          profil: profil,
+          projets: mappedProjets,
+          competences: mappedCompetences,
+          experiences: mappedExperiences,
+        };
+      } catch (err: any) {
+        console.error('Erreur getPortfolio:', err?.message || err);
+        throw new Error('Erreur interne lors de la récupération du portfolio');
+      }
+    },
   },
 };

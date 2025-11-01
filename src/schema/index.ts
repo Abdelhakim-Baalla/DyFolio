@@ -30,12 +30,6 @@ export const typeDefs = gql`
     dateFin: String
   }
 
-  type Portfolio {
-    bio: String
-    projets: [Projet!]!
-    competences: [Competence!]!
-    experiences: [Experience!]!
-  }
 
   type Profil {
     nom: String!
@@ -45,6 +39,13 @@ export const typeDefs = gql`
     photo: String
     reseauxSociaux: [String!]
     localisation: String
+  }
+
+  type Portfolio {
+    profil: Profil!
+    projets: [Projet!]!
+    competences: [Competence!]!
+    experiences: [Experience!]!
   }
 
   type Query {
