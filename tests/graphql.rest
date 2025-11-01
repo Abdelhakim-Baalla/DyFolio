@@ -1,0 +1,65 @@
+@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5MDYxNTg4NmFlMjBmMzNiYzM5YmIxNyIsImVtYWlsIjoiYWJkZWxoYWtpbWJhYWxsYTUwQGdtYWlsLmNvbSIsImlhdCI6MTc2MjAwNjQxOCwiZXhwIjoxNzYyNjExMjE4fQ.yTt-bRNnX8C2vCp9Gai6N39Vv_FuqpN0-L4kYiXoC04
+
+### Authenticated - getProfil (avec Authorization header)
+POST http://localhost:3895/graphql
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+{
+  "query": "query { getProfil { nom prenom metier bio photo reseauxSociaux localisation } }"
+}
+
+### Authenticated - getProjets
+POST http://localhost:3895/graphql
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+{
+  "query": "query { getProjets { titre description image lienDemo lienCode competences { nom } } }"
+}
+
+### Authenticated - getCompetences
+POST http://localhost:3895/graphql
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+{
+  "query": "query { getCompetences { nom niveau categorie { nom } } }"
+}
+
+### Authenticated - getExperiences
+POST http://localhost:3895/graphql
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+{
+  "query": "query { getExperiences { entreprise poste description dateDebut dateFin } }"
+}
+
+### Auth - register (crée un utilisateur de test)
+POST http://localhost:3895/api/v1/register
+Content-Type: application/json
+
+{
+  "username": "AbdelhakimBaalla",
+  "email": "abdelhakimbaalla50@gmail.com",
+  "password": "123456789"
+}
+
+### Auth - login (récupère un token pour l'utilisateur créé)
+POST http://localhost:3895/api/v1/login
+Content-Type: application/json
+
+{
+  "email": "abdelhakimbaalla50@gmail.com",
+  "password": "123456789"
+}
+
+### Authenticated - getPortfolio
+POST http://localhost:3895/graphql
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+{
+  "query": "query { getPortfolio { profil { bio nom prenom metier photo localisation } projets { titre description lienDemo lienCode } competences { nom niveau categorie { nom } } experiences { entreprise poste description dateDebut dateFin } } }"
+}
