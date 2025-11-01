@@ -101,5 +101,37 @@ export const resolvers = {
         throw new Error('Erreur interne lors de la récupération des compétences');
       }
     },
+    getExperiences: async (_parent: any, _args: any, context: any) => {
+      try {
+        const Experience = Models.Experience;
+
+        const payload = (context && (context.user || context.utilisateur)) || null;
+        const utilisateurId = payload && (payload.id || payload._id || payload.userId || payload.utilisateurId);
+
+        if (!utilisateurId) {
+          throw new Error('Utilisateur non authentifié');
+        }
+
+        const experiences = await Experience.find({ utilisateur: utilisateurId }).lean();
+
+        if (!experiences || experiences.length === 0) {
+          return [];
+        }
+
+        return experiences.map((e: any) => ({
+          poste: e.poste || '',
+          entreprise: e.entreprise || '',
+          description: e.description || '',
+          dateDebut: e.dateDebut ? new Date(e.dateDebut).toISOString() : null,
+          dateFin: e.dateFin ? new Date(e.dateFin).toISOString() : null,
+        }));
+      } catch (err: any) {
+        console.error('Erreur getExperiences:', err?.message || err);
+        if (err instanceof Error && err.message === 'Utilisateur non authentifié') {
+          throw err;
+        }
+        throw new Error('Erreur interne lors de la récupération des expériences');
+      }
+    },
   },
 };
