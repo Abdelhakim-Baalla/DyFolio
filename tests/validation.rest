@@ -1,0 +1,317 @@
+### ============================================
+### TESTS DE VALIDATION JOI - PROJETS
+### ============================================
+
+@baseUrl = http://localhost:4000/graphql
+@token = YOUR_TOKEN_HERE
+
+### 1. ✅ Test validation réussie - Créer un projet valide
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation { createProjet(input: { titre: \"Mon Super Projet\", description: \"Une description détaillée d'au moins 10 caractères\", technologies: [\"React\", \"Node.js\"] }) { id titre description technologies } }"
+}
+
+### 2. ❌ Test validation échouée - Titre trop court (< 3 caractères)
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation { createProjet(input: { titre: \"AB\", description: \"Une description détaillée d'au moins 10 caractères\", technologies: [\"React\"] }) { id titre } }"
+}
+
+### 3. ❌ Test validation échouée - Description trop courte (< 10 caractères)
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation { createProjet(input: { titre: \"Mon Projet\", description: \"Court\", technologies: [\"React\"] }) { id titre } }"
+}
+
+### 4. ❌ Test validation échouée - Aucune technologie fournie
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation { createProjet(input: { titre: \"Mon Projet\", description: \"Une description valide\", technologies: [] }) { id titre } }"
+}
+
+### 5. ❌ Test validation échouée - URL GitHub invalide
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation { createProjet(input: { titre: \"Mon Projet\", description: \"Une description valide\", technologies: [\"React\"], lienGithub: \"pas-une-url\" }) { id titre } }"
+}
+
+### 6. ❌ Test validation échouée - ID de compétence invalide (pas format MongoDB)
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation { createProjet(input: { titre: \"Mon Projet\", description: \"Une description valide\", technologies: [\"React\"], competences: [\"invalid-id\"] }) { id titre } }"
+}
+
+### 7. ❌ Test validation échouée - Update sans aucun champ
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation { updateProjet(id: \"67217f2e7a6e91f8ef7d89ba\", input: {}) { id titre } }"
+}
+
+### 8. ❌ Test validation échouée - ID de projet invalide
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation { updateProjet(id: \"invalid-id\", input: { titre: \"Nouveau titre\" }) { id titre } }"
+}
+
+### ============================================
+### TESTS DE VALIDATION JOI - COMPÉTENCES
+### ============================================
+
+### 9. ✅ Test validation réussie - Créer une compétence valide
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation { createCompetence(input: { nom: \"React\", niveau: 4, categorie: \"67217f2e7a6e91f8ef7d89ba\" }) { id nom niveau } }"
+}
+
+### 10. ❌ Test validation échouée - Nom trop court (< 2 caractères)
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation { createCompetence(input: { nom: \"R\", niveau: 4, categorie: \"67217f2e7a6e91f8ef7d89ba\" }) { id nom } }"
+}
+
+### 11. ❌ Test validation échouée - Niveau invalide (> 5)
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation { createCompetence(input: { nom: \"React\", niveau: 6, categorie: \"67217f2e7a6e91f8ef7d89ba\" }) { id nom } }"
+}
+
+### 12. ❌ Test validation échouée - Niveau invalide (< 1)
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation { createCompetence(input: { nom: \"React\", niveau: 0, categorie: \"67217f2e7a6e91f8ef7d89ba\" }) { id nom } }"
+}
+
+### 13. ❌ Test validation échouée - Niveau non entier
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation { createCompetence(input: { nom: \"React\", niveau: 3.5, categorie: \"67217f2e7a6e91f8ef7d89ba\" }) { id nom } }"
+}
+
+### 14. ❌ Test validation échouée - ID de catégorie invalide
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation { createCompetence(input: { nom: \"React\", niveau: 4, categorie: \"invalid-category-id\" }) { id nom } }"
+}
+
+### 15. ❌ Test validation échouée - Description trop courte (< 10 caractères)
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation { createCompetence(input: { nom: \"React\", niveau: 4, categorie: \"67217f2e7a6e91f8ef7d89ba\", description: \"Court\" }) { id nom } }"
+}
+
+### 16. ❌ Test validation échouée - URL d'icône invalide
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation { createCompetence(input: { nom: \"React\", niveau: 4, categorie: \"67217f2e7a6e91f8ef7d89ba\", icone: \"pas-une-url\" }) { id nom } }"
+}
+
+### ============================================
+### TESTS DE VALIDATION JOI - EXPÉRIENCES
+### ============================================
+
+### 17. ✅ Test validation réussie - Créer une expérience valide
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation { createExperience(input: { poste: \"Développeur Full Stack\", entreprise: \"TechCorp\", description: \"Développement d'applications web modernes avec React et Node.js\" }) { id poste entreprise } }"
+}
+
+### 18. ❌ Test validation échouée - Poste trop court (< 3 caractères)
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation { createExperience(input: { poste: \"De\", entreprise: \"TechCorp\", description: \"Description valide d'au moins 10 caractères\" }) { id poste } }"
+}
+
+### 19. ❌ Test validation échouée - Entreprise trop courte (< 2 caractères)
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation { createExperience(input: { poste: \"Développeur\", entreprise: \"T\", description: \"Description valide d'au moins 10 caractères\" }) { id entreprise } }"
+}
+
+### 20. ❌ Test validation échouée - Description trop courte (< 10 caractères)
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation { createExperience(input: { poste: \"Développeur\", entreprise: \"TechCorp\", description: \"Court\" }) { id description } }"
+}
+
+### 21. ❌ Test validation échouée - Date de début invalide (pas format ISO)
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation { createExperience(input: { poste: \"Développeur\", entreprise: \"TechCorp\", description: \"Description valide\", dateDebut: \"01/01/2024\" }) { id poste } }"
+}
+
+### 22. ❌ Test validation échouée - Date de fin avant date de début
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation { createExperience(input: { poste: \"Développeur\", entreprise: \"TechCorp\", description: \"Description valide\", dateDebut: \"2024-12-31\", dateFin: \"2024-01-01\" }) { id poste } }"
+}
+
+### 23. ❌ Test validation échouée - Type d'expérience invalide
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation { createExperience(input: { poste: \"Développeur\", entreprise: \"TechCorp\", description: \"Description valide\", type: \"Contrat-Invalide\" }) { id poste } }"
+}
+
+### 24. ✅ Test validation réussie - Type d'expérience valide (CDI)
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation { createExperience(input: { poste: \"Développeur\", entreprise: \"TechCorp\", description: \"Description valide\", type: \"CDI\" }) { id poste type } }"
+}
+
+### 25. ✅ Test validation réussie - Expérience avec dates valides
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation { createExperience(input: { poste: \"Développeur\", entreprise: \"TechCorp\", description: \"Description valide\", dateDebut: \"2024-01-01\", dateFin: \"2024-12-31\" }) { id poste dateDebut dateFin } }"
+}
+
+### 26. ✅ Test validation réussie - Expérience en cours (dateFin null)
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation { createExperience(input: { poste: \"Développeur\", entreprise: \"TechCorp\", description: \"Description valide\", dateDebut: \"2024-01-01\", dateFin: null }) { id poste dateDebut dateFin } }"
+}
+
+### 27. ❌ Test validation échouée - ID de compétence invalide
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation { createExperience(input: { poste: \"Développeur\", entreprise: \"TechCorp\", description: \"Description valide\", competences: [\"invalid-id\"] }) { id poste } }"
+}
+
+### ============================================
+### TESTS DE VALIDATION - CAS MULTIPLES ERREURS
+### ============================================
+
+### 28. ❌ Test validation échouée - Multiples erreurs en même temps (abortEarly: false)
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation { createProjet(input: { titre: \"AB\", description: \"Court\", technologies: [] }) { id titre } }"
+}
+
+# Réponse attendue : Toutes les erreurs listées en une fois:
+# - Le titre doit contenir au moins 3 caractères
+# - La description doit contenir au moins 10 caractères
+# - Au moins une technologie est requise
+
+### 29. ❌ Test validation échouée - Compétence avec plusieurs erreurs
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation { createCompetence(input: { nom: \"R\", niveau: 10, categorie: \"invalid-id\" }) { id nom } }"
+}
+
+# Réponse attendue :
+# - Le nom doit contenir au moins 2 caractères
+# - Le niveau doit être au maximum 5
+# - La catégorie doit être un ID MongoDB valide
+
+### 30. ❌ Test validation échouée - Expérience avec plusieurs erreurs
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation { createExperience(input: { poste: \"De\", entreprise: \"T\", description: \"Court\", type: \"Invalide\" }) { id poste } }"
+}
+
+# Réponse attendue :
+# - Le poste doit contenir au moins 3 caractères
+# - L'entreprise doit contenir au moins 2 caractères
+# - La description doit contenir au moins 10 caractères
+# - Le type doit être: CDI, CDD, Stage, Freelance ou Alternance
+
+### ============================================
+### NOTES
+### ============================================
+
+# ✅ Tests qui doivent réussir (codes 200)
+# ❌ Tests qui doivent échouer avec message d'erreur explicite
+
+# Remplacer YOUR_TOKEN_HERE par un vrai token JWT
+# Remplacer les IDs MongoDB exemples par des IDs réels de votre base de données
+
+# L'option abortEarly: false permet de retourner toutes les erreurs en une fois
+# ce qui est très utile pour l'utilisateur qui peut corriger tous les problèmes d'un coup

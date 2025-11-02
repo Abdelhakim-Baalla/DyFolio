@@ -1,0 +1,114 @@
+### Variables
+@baseUrl = http://localhost:4000/graphql
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5MDYxNTg4NmFlMjBmMzNiYzM5YmIxNyIsImVtYWlsIjoiYWJkZWxoYWtpbWJhYWxsYTUwQGdtYWlsLmNvbSIsImlhdCI6MTc2MjA5ODcyNiwiZXhwIjoxNzYyMTAyMzI2fQ.K0dtk4f44m46rffjn7wUWmqv1rnf2I9d4lklTJbKGHA
+
+### 1. Créer une nouvelle compétence
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation CreateCompetence($input: CreateCompetenceInput!) { createCompetence(input: $input) { id nom niveau categorie { id nom } } }",
+  "variables": {
+    "input": {
+      "nom": "React",
+      "niveau": 85,
+      "categorie": "CATEGORIE_ID_HERE"
+    }
+  }
+}
+
+### 2. Récupérer toutes les compétences
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "query GetCompetences { getCompetences { id nom niveau categorie { id nom } } }"
+}
+
+### 3. Récupérer une compétence par ID
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "query GetCompetence($id: ID!) { getCompetence(id: $id) { id nom niveau categorie { id nom } } }",
+  "variables": {
+    "id": "COMPETENCE_ID_HERE"
+  }
+}
+
+### 4. Mettre à jour une compétence
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation UpdateCompetence($id: ID!, $input: UpdateCompetenceInput!) { updateCompetence(id: $id, input: $input) { id nom niveau categorie { id nom } } }",
+  "variables": {
+    "id": "COMPETENCE_ID_HERE",
+    "input": {
+      "nom": "React Advanced",
+      "niveau": 95
+    }
+  }
+}
+
+### 5. Supprimer une compétence
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation DeleteCompetence($id: ID!) { deleteCompetence(id: $id) }",
+  "variables": {
+    "id": "COMPETENCE_ID_HERE"
+  }
+}
+
+### 6. Test complet - Créer plusieurs compétences
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation CreateCompetence($input: CreateCompetenceInput!) { createCompetence(input: $input) { id nom niveau categorie { id nom } } }",
+  "variables": {
+    "input": {
+      "nom": "Node.js",
+      "niveau": 80,
+      "categorie": "CATEGORIE_ID_HERE"
+    }
+  }
+}
+
+### 7. Mettre à jour le niveau d'une compétence
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation UpdateCompetence($id: ID!, $input: UpdateCompetenceInput!) { updateCompetence(id: $id, input: $input) { id nom niveau categorie { id nom } } }",
+  "variables": {
+    "id": "COMPETENCE_ID_HERE",
+    "input": {
+      "niveau": 90
+    }
+  }
+}
+
+### 8. Changer la catégorie d'une compétence
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation UpdateCompetence($id: ID!, $input: UpdateCompetenceInput!) { updateCompetence(id: $id, input: $input) { id nom niveau categorie { id nom } } }",
+  "variables": {
+    "id": "COMPETENCE_ID_HERE",
+    "input": {
+      "categorie": "NEW_CATEGORIE_ID_HERE"
+    }
+  }
+}

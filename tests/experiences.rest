@@ -1,0 +1,137 @@
+### Variables
+@baseUrl = http://localhost:4000/graphql
+@token = YOUR_TOKEN_HERE
+
+### 1. Créer une nouvelle expérience
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation CreateExperience($input: CreateExperienceInput!) { createExperience(input: $input) { id poste entreprise description dateDebut dateFin } }",
+  "variables": {
+    "input": {
+      "poste": "Développeur Full Stack",
+      "entreprise": "Tech Company",
+      "description": "Développement d'applications web modernes avec React et Node.js",
+      "dateDebut": "2023-01-15",
+      "dateFin": "2024-06-30"
+    }
+  }
+}
+
+### 2. Récupérer toutes les expériences
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "query GetExperiences { getExperiences { id poste entreprise description dateDebut dateFin } }"
+}
+
+### 3. Récupérer une expérience par ID
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "query GetExperience($id: ID!) { getExperience(id: $id) { id poste entreprise description dateDebut dateFin } }",
+  "variables": {
+    "id": "EXPERIENCE_ID_HERE"
+  }
+}
+
+### 4. Mettre à jour une expérience
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation UpdateExperience($id: ID!, $input: UpdateExperienceInput!) { updateExperience(id: $id, input: $input) { id poste entreprise description dateDebut dateFin } }",
+  "variables": {
+    "id": "EXPERIENCE_ID_HERE",
+    "input": {
+      "poste": "Senior Full Stack Developer",
+      "description": "Lead développeur sur des projets d'envergure"
+    }
+  }
+}
+
+### 5. Supprimer une expérience
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation DeleteExperience($id: ID!) { deleteExperience(id: $id) }",
+  "variables": {
+    "id": "EXPERIENCE_ID_HERE"
+  }
+}
+
+### 6. Créer une expérience en cours (sans date de fin)
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation CreateExperience($input: CreateExperienceInput!) { createExperience(input: $input) { id poste entreprise description dateDebut dateFin } }",
+  "variables": {
+    "input": {
+      "poste": "Lead Developer",
+      "entreprise": "StartupXYZ",
+      "description": "Direction technique et développement de la plateforme",
+      "dateDebut": "2024-07-01"
+    }
+  }
+}
+
+### 7. Mettre à jour uniquement la date de fin (terminer une expérience)
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation UpdateExperience($id: ID!, $input: UpdateExperienceInput!) { updateExperience(id: $id, input: $input) { id poste entreprise dateDebut dateFin } }",
+  "variables": {
+    "id": "EXPERIENCE_ID_HERE",
+    "input": {
+      "dateFin": "2024-11-02"
+    }
+  }
+}
+
+### 8. Créer plusieurs expériences (Stage puis CDI)
+# Stage
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation CreateExperience($input: CreateExperienceInput!) { createExperience(input: $input) { id poste entreprise dateDebut dateFin } }",
+  "variables": {
+    "input": {
+      "poste": "Stagiaire Développeur",
+      "entreprise": "Digital Agency",
+      "description": "Stage de fin d'études en développement web",
+      "dateDebut": "2022-03-01",
+      "dateFin": "2022-08-31"
+    }
+  }
+}
+
+### 9. Mettre à jour l'entreprise et la description
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation UpdateExperience($id: ID!, $input: UpdateExperienceInput!) { updateExperience(id: $id, input: $input) { id poste entreprise description } }",
+  "variables": {
+    "id": "EXPERIENCE_ID_HERE",
+    "input": {
+      "entreprise": "Digital Agency (anciennement WebCorp)",
+      "description": "Développement frontend avec React et TypeScript"
+    }
+  }
+}

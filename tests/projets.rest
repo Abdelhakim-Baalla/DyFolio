@@ -1,0 +1,91 @@
+### Variables
+@baseUrl = http://localhost:4000/graphql
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5MDYxNTg4NmFlMjBmMzNiYzM5YmIxNyIsImVtYWlsIjoiYWJkZWxoYWtpbWJhYWxsYTUwQGdtYWlsLmNvbSIsImlhdCI6MTc2MjA5ODcyNiwiZXhwIjoxNzYyMTAyMzI2fQ.K0dtk4f44m46rffjn7wUWmqv1rnf2I9d4lklTJbKGHA
+
+### 1. Créer un nouveau projet
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation CreateProjet($input: CreateProjetInput!) { createProjet(input: $input) { id titre description image lienDemo lienCode competences { nom } } }",
+  "variables": {
+    "input": {
+      "titre": "Mon Super Projet",
+      "description": "Une description détaillée de mon projet",
+      "image": "https://example.com/image.jpg",
+      "lienDemo": "https://demo.example.com",
+      "lienCode": "https://github.com/user/projet",
+      "competences": []
+    }
+  }
+}
+
+### 2. Récupérer tous les projets
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "query GetProjets { getProjets { id titre description image lienDemo lienCode competences { nom } } }"
+}
+
+### 3. Récupérer un projet par ID
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "query GetProjet($id: ID!) { getProjet(id: $id) { id titre description image lienDemo lienCode competences { nom } } }",
+  "variables": {
+    "id": "PROJET_ID_HERE"
+  }
+}
+
+### 4. Mettre à jour un projet
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation UpdateProjet($id: ID!, $input: UpdateProjetInput!) { updateProjet(id: $id, input: $input) { id titre description image lienDemo lienCode competences { nom } } }",
+  "variables": {
+    "id": "PROJET_ID_HERE",
+    "input": {
+      "titre": "Mon Projet Mis à Jour",
+      "description": "Description mise à jour"
+    }
+  }
+}
+
+### 5. Supprimer un projet
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation DeleteProjet($id: ID!) { deleteProjet(id: $id) }",
+  "variables": {
+    "id": "PROJET_ID_HERE"
+  }
+}
+
+### 6. Test complet - Créer un projet avec des compétences
+# D'abord, vous aurez besoin de l'ID de compétences existantes
+POST {{baseUrl}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation CreateProjet($input: CreateProjetInput!) { createProjet(input: $input) { id titre description image lienDemo lienCode competences { nom } } }",
+  "variables": {
+    "input": {
+      "titre": "Portfolio Personnel",
+      "description": "Un site portfolio moderne et responsive",
+      "image": "https://example.com/portfolio.png",
+      "lienDemo": "https://portfolio.example.com",
+      "lienCode": "https://github.com/user/portfolio",
+      "competences": ["COMPETENCE_ID_1", "COMPETENCE_ID_2"]
+    }
+  }
+}
