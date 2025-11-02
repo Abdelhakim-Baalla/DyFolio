@@ -1,0 +1,38 @@
+### Tests Docker - DyFolio
+
+# 1. Vérifier que l'API est accessible
+GET http://localhost:4000/graphql
+Content-Type: application/json
+
+###
+
+# 2. Test GraphQL - Ping
+POST http://localhost:4000/graphql
+Content-Type: application/json
+
+{
+  "query": "{ __typename }"
+}
+
+###
+
+# 3. Test inscription via Docker
+POST http://localhost:4000/api/v1/register
+Content-Type: application/json
+
+{
+  "username": "docker_user",
+  "email": "docker@test.com",
+  "password": "password123"
+}
+
+###
+
+# 4. Test connexion via Docker
+POST http://localhost:4000/api/v1/login
+Content-Type: application/json
+
+{
+  "email": "docker@test.com",
+  "password": "password123"
+}
