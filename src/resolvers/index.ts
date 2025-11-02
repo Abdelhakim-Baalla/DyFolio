@@ -264,8 +264,9 @@ export const resolvers = {
 
     register: async (_parent: any, args: any) => {
       try {
-        const { username, email, password } = args.input;
+        const { username, email, password, nom, prenom, metier } = args.input;
         const Utilisateur = Models.Utilisateur;
+        const Profil = Models.Profil;
 
         const existing = await Utilisateur.findOne({ $or: [{ email }, { username }] });
         if (existing) {
@@ -278,6 +279,17 @@ export const resolvers = {
           username,
           email,
           password: hashedPassword,
+        });
+
+        await Profil.create({
+          utilisateur: newUser._id,
+          nom,
+          prenom,
+          metier,
+          bio: '',
+          photo: '',
+          reseauxSociaux: [],
+          localisation: '',
         });
 
         const token = jwt.sign({ id: newUser._id, email: newUser.email }, process.env.JWT_SECRET, { expiresIn: '7d' });

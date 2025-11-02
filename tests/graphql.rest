@@ -78,7 +78,7 @@ Content-Type: application/json
 
 {
   "query": "mutation ($input: RegisterInput!) { register(input: $input) { token user { id username email } } }",
-  "variables": { "input": { "username": "testuser", "email": "test@example.com", "password": "password123" } }
+  "variables": { "input": { "username": "testuser", "email": "test@example.com", "password": "password123", "nom": "Test", "prenom": "User", "metier": "Développeur" } }
 }
 
 ### GraphQL Mutation - updateProfil
