@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  # Base de données MongoDB
+  mongodb:
+    image: mongo:7.0
+    container_name: dyfolio-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: dyfolio
+    volumes:
+      - mongodb_data:/data/db
+      - mongodb_config:/data/configdb
+    networks:
+      - dyfolio-network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # API DyFolio
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dyfolio-api
+    restart: unless-stopped
+    ports:
+      - "4000:4000"
+    environment:
+      - NODE_ENV=production
+      - PORT=4000
+      - MONGODB_URI=mongodb://mongodb:27017/dyfolio
+      - JWT_SECRET=${JWT_SECRET:-a265e7a1ee429d8b3e35e6967ea45c7ca2a856f5fbc122c388bc998058bc7708}
+      - LOG_LEVEL=info
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - dyfolio-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:4000/graphql"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+# Volumes persistants
+volumes:
+  mongodb_data:
+    driver: local
+  mongodb_config:
+    driver: local
+
+# Réseau
+networks:
+  dyfolio-network:
+    driver: bridge
