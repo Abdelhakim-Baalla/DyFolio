@@ -1,0 +1,791 @@
+{
+	"info": {
+		"_postman_id": "dyfolio-api-collection",
+		"name": "DyFolio API",
+		"description": "Collection complète pour tester l'API DyFolio - Portfolio dynamique avec REST et GraphQL",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:4000",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "userId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "competenceId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "experienceId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "projetId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "categorieId",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Authentification",
+			"item": [
+				{
+					"name": "Register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    pm.collectionVariables.set('token', response.token);",
+									"    pm.collectionVariables.set('userId', response.utilisateur.id);",
+									"    pm.environment.set('token', response.token);",
+									"    pm.environment.set('userId', response.utilisateur.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nom\": \"Baalla\",\n  \"prenom\": \"Abdelhakim\",\n  \"email\": \"abdelhakim@dyfolio.com\",\n  \"motDePasse\": \"Password123!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/register",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "auth", "register"]
+						},
+						"description": "Inscription d'un nouvel utilisateur. Le token JWT est automatiquement sauvegardé dans les variables."
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    pm.collectionVariables.set('token', response.token);",
+									"    pm.collectionVariables.set('userId', response.utilisateur.id);",
+									"    pm.environment.set('token', response.token);",
+									"    pm.environment.set('userId', response.utilisateur.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"abdelhakim@dyfolio.com\",\n  \"motDePasse\": \"Password123!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "auth", "login"]
+						},
+						"description": "Connexion avec email et mot de passe. Retourne un token JWT valide."
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints d'authentification - Inscription et connexion"
+		},
+		{
+			"name": "GraphQL - Compétences",
+			"item": [
+				{
+					"name": "Créer Compétence",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.data && response.data.creerCompetence) {",
+									"        pm.collectionVariables.set('competenceId', response.data.creerCompetence.id);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation CreerCompetence($input: CompetenceInput!) {\n  creerCompetence(input: $input) {\n    id\n    nom\n    niveau\n    description\n    icone\n    categorie {\n      id\n      nom\n    }\n    utilisateur {\n      id\n      nom\n      prenom\n    }\n  }\n}",
+								"variables": "{\n  \"input\": {\n    \"nom\": \"TypeScript\",\n    \"niveau\": 4,\n    \"categorie\": \"{{categorieId}}\",\n    \"description\": \"Langage de programmation typé pour JavaScript\",\n    \"icone\": \"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg\"\n  }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": ["{{baseUrl}}"],
+							"path": ["graphql"]
+						},
+						"description": "Créer une nouvelle compétence avec GraphQL"
+					},
+					"response": []
+				},
+				{
+					"name": "Liste Compétences",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query ListeCompetences {\n  competences {\n    id\n    nom\n    niveau\n    description\n    icone\n    categorie {\n      id\n      nom\n    }\n    utilisateur {\n      id\n      nom\n      prenom\n    }\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": ["{{baseUrl}}"],
+							"path": ["graphql"]
+						},
+						"description": "Récupérer toutes les compétences de l'utilisateur connecté"
+					},
+					"response": []
+				},
+				{
+					"name": "Compétence par ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query CompetenceParId($id: ID!) {\n  competence(id: $id) {\n    id\n    nom\n    niveau\n    description\n    icone\n    categorie {\n      id\n      nom\n    }\n    utilisateur {\n      id\n      nom\n      prenom\n    }\n  }\n}",
+								"variables": "{\n  \"id\": \"{{competenceId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": ["{{baseUrl}}"],
+							"path": ["graphql"]
+						},
+						"description": "Récupérer une compétence spécifique par son ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Modifier Compétence",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation ModifierCompetence($id: ID!, $input: CompetenceInput!) {\n  modifierCompetence(id: $id, input: $input) {\n    id\n    nom\n    niveau\n    description\n    icone\n    categorie {\n      id\n      nom\n    }\n  }\n}",
+								"variables": "{\n  \"id\": \"{{competenceId}}\",\n  \"input\": {\n    \"nom\": \"TypeScript\",\n    \"niveau\": 5,\n    \"categorie\": \"{{categorieId}}\",\n    \"description\": \"Expert TypeScript - Langage de programmation typé\",\n    \"icone\": \"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg\"\n  }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": ["{{baseUrl}}"],
+							"path": ["graphql"]
+						},
+						"description": "Modifier une compétence existante"
+					},
+					"response": []
+				},
+				{
+					"name": "Supprimer Compétence",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation SupprimerCompetence($id: ID!) {\n  supprimerCompetence(id: $id)\n}",
+								"variables": "{\n  \"id\": \"{{competenceId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": ["{{baseUrl}}"],
+							"path": ["graphql"]
+						},
+						"description": "Supprimer une compétence"
+					},
+					"response": []
+				}
+			],
+			"description": "CRUD Compétences via GraphQL"
+		},
+		{
+			"name": "GraphQL - Expériences",
+			"item": [
+				{
+					"name": "Créer Expérience",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.data && response.data.creerExperience) {",
+									"        pm.collectionVariables.set('experienceId', response.data.creerExperience.id);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation CreerExperience($input: ExperienceInput!) {\n  creerExperience(input: $input) {\n    id\n    poste\n    entreprise\n    description\n    dateDebut\n    dateFin\n    lieu\n    type\n    competences {\n      id\n      nom\n    }\n  }\n}",
+								"variables": "{\n  \"input\": {\n    \"poste\": \"Développeur Full Stack\",\n    \"entreprise\": \"TechCorp\",\n    \"description\": \"Développement d'applications web modernes avec React et Node.js. Mise en place de CI/CD et migration vers microservices.\",\n    \"dateDebut\": \"2023-01-15\",\n    \"dateFin\": \"2024-12-31\",\n    \"lieu\": \"Paris, France\",\n    \"type\": \"CDI\"\n  }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": ["{{baseUrl}}"],
+							"path": ["graphql"]
+						},
+						"description": "Créer une nouvelle expérience professionnelle"
+					},
+					"response": []
+				},
+				{
+					"name": "Liste Expériences",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query ListeExperiences {\n  experiences {\n    id\n    poste\n    entreprise\n    description\n    dateDebut\n    dateFin\n    lieu\n    type\n    competences {\n      id\n      nom\n      niveau\n    }\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": ["{{baseUrl}}"],
+							"path": ["graphql"]
+						},
+						"description": "Récupérer toutes les expériences de l'utilisateur"
+					},
+					"response": []
+				},
+				{
+					"name": "Expérience par ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query ExperienceParId($id: ID!) {\n  experience(id: $id) {\n    id\n    poste\n    entreprise\n    description\n    dateDebut\n    dateFin\n    lieu\n    type\n    competences {\n      id\n      nom\n      niveau\n    }\n  }\n}",
+								"variables": "{\n  \"id\": \"{{experienceId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": ["{{baseUrl}}"],
+							"path": ["graphql"]
+						},
+						"description": "Récupérer une expérience spécifique par son ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Modifier Expérience",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation ModifierExperience($id: ID!, $input: ExperienceInput!) {\n  modifierExperience(id: $id, input: $input) {\n    id\n    poste\n    entreprise\n    description\n    dateDebut\n    dateFin\n    lieu\n    type\n  }\n}",
+								"variables": "{\n  \"id\": \"{{experienceId}}\",\n  \"input\": {\n    \"poste\": \"Senior Full Stack Developer\",\n    \"entreprise\": \"TechCorp\",\n    \"description\": \"Lead technique sur plusieurs projets stratégiques. Développement d'applications web modernes avec React et Node.js.\",\n    \"dateDebut\": \"2023-01-15\",\n    \"lieu\": \"Paris, France\",\n    \"type\": \"CDI\"\n  }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": ["{{baseUrl}}"],
+							"path": ["graphql"]
+						},
+						"description": "Modifier une expérience existante (dateFin omise = poste actuel)"
+					},
+					"response": []
+				},
+				{
+					"name": "Supprimer Expérience",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation SupprimerExperience($id: ID!) {\n  supprimerExperience(id: $id)\n}",
+								"variables": "{\n  \"id\": \"{{experienceId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": ["{{baseUrl}}"],
+							"path": ["graphql"]
+						},
+						"description": "Supprimer une expérience"
+					},
+					"response": []
+				}
+			],
+			"description": "CRUD Expériences professionnelles via GraphQL"
+		},
+		{
+			"name": "GraphQL - Projets",
+			"item": [
+				{
+					"name": "Créer Projet",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.data && response.data.creerProjet) {",
+									"        pm.collectionVariables.set('projetId', response.data.creerProjet.id);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation CreerProjet($input: ProjetInput!) {\n  creerProjet(input: $input) {\n    id\n    titre\n    description\n    technologies\n    lienGithub\n    lienDemo\n    images\n    dateDebut\n    dateFin\n    competences {\n      id\n      nom\n    }\n  }\n}",
+								"variables": "{\n  \"input\": {\n    \"titre\": \"Application E-commerce\",\n    \"description\": \"Plateforme de vente en ligne complète avec gestion des stocks, paiements Stripe, et tableau de bord admin. Architecture microservices avec React, Node.js et MongoDB.\",\n    \"technologies\": [\"React\", \"Node.js\", \"MongoDB\", \"Stripe\", \"Docker\"],\n    \"lienGithub\": \"https://github.com/Abdelhakim-Baalla/ecommerce-app\",\n    \"lienDemo\": \"https://demo-ecommerce.dyfolio.com\",\n    \"images\": [\"https://via.placeholder.com/800x600\"],\n    \"dateDebut\": \"2024-01-01\"\n  }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": ["{{baseUrl}}"],
+							"path": ["graphql"]
+						},
+						"description": "Créer un nouveau projet"
+					},
+					"response": []
+				},
+				{
+					"name": "Liste Projets",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query ListeProjets {\n  projets {\n    id\n    titre\n    description\n    technologies\n    lienGithub\n    lienDemo\n    images\n    dateDebut\n    dateFin\n    competences {\n      id\n      nom\n      niveau\n    }\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": ["{{baseUrl}}"],
+							"path": ["graphql"]
+						},
+						"description": "Récupérer tous les projets de l'utilisateur"
+					},
+					"response": []
+				},
+				{
+					"name": "Projet par ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query ProjetParId($id: ID!) {\n  projet(id: $id) {\n    id\n    titre\n    description\n    technologies\n    lienGithub\n    lienDemo\n    images\n    dateDebut\n    dateFin\n    competences {\n      id\n      nom\n      niveau\n    }\n  }\n}",
+								"variables": "{\n  \"id\": \"{{projetId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": ["{{baseUrl}}"],
+							"path": ["graphql"]
+						},
+						"description": "Récupérer un projet spécifique par son ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Modifier Projet",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation ModifierProjet($id: ID!, $input: ProjetInput!) {\n  modifierProjet(id: $id, input: $input) {\n    id\n    titre\n    description\n    technologies\n    lienGithub\n    lienDemo\n    dateDebut\n    dateFin\n  }\n}",
+								"variables": "{\n  \"id\": \"{{projetId}}\",\n  \"input\": {\n    \"titre\": \"Application E-commerce V2\",\n    \"description\": \"Version améliorée de la plateforme de vente en ligne avec recommandations IA et chat en temps réel.\",\n    \"technologies\": [\"React\", \"Node.js\", \"MongoDB\", \"Stripe\", \"Docker\", \"Socket.io\", \"TensorFlow\"],\n    \"lienGithub\": \"https://github.com/Abdelhakim-Baalla/ecommerce-app\",\n    \"lienDemo\": \"https://demo-ecommerce.dyfolio.com\",\n    \"dateDebut\": \"2024-01-01\",\n    \"dateFin\": \"2024-11-02\"\n  }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": ["{{baseUrl}}"],
+							"path": ["graphql"]
+						},
+						"description": "Modifier un projet existant"
+					},
+					"response": []
+				},
+				{
+					"name": "Supprimer Projet",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation SupprimerProjet($id: ID!) {\n  supprimerProjet(id: $id)\n}",
+								"variables": "{\n  \"id\": \"{{projetId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": ["{{baseUrl}}"],
+							"path": ["graphql"]
+						},
+						"description": "Supprimer un projet"
+					},
+					"response": []
+				}
+			],
+			"description": "CRUD Projets via GraphQL"
+		},
+		{
+			"name": "GraphQL - Portfolio",
+			"item": [
+				{
+					"name": "Portfolio Complet",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query PortfolioComplet($utilisateurId: ID!) {\n  profil(utilisateurId: $utilisateurId) {\n    utilisateur {\n      id\n      nom\n      prenom\n      email\n    }\n    competences {\n      id\n      nom\n      niveau\n      description\n      icone\n      categorie {\n        id\n        nom\n      }\n    }\n    experiences {\n      id\n      poste\n      entreprise\n      description\n      dateDebut\n      dateFin\n      lieu\n      type\n      competences {\n        id\n        nom\n        niveau\n      }\n    }\n    projets {\n      id\n      titre\n      description\n      technologies\n      lienGithub\n      lienDemo\n      images\n      dateDebut\n      dateFin\n      competences {\n        id\n        nom\n        niveau\n      }\n    }\n  }\n}",
+								"variables": "{\n  \"utilisateurId\": \"{{userId}}\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": ["{{baseUrl}}"],
+							"path": ["graphql"]
+						},
+						"description": "Récupère l'intégralité du portfolio : informations utilisateur, compétences, expériences et projets"
+					},
+					"response": []
+				}
+			],
+			"description": "Récupération du portfolio complet avec toutes les données"
+		}
+	]
+}
