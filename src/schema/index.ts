@@ -55,4 +55,30 @@ export const typeDefs = gql`
     getCompetences: [Competence!]!
     getExperiences: [Experience!]!
   }
+
+  type MiniUtilisateur {
+    id: ID!
+    username: String!
+    email: String!
+  }
+
+  type AuthPayload {
+    token: String!
+    user: MiniUtilisateur!
+  }
+
+  input UpdateProfilInput {
+    nom: String
+    prenom: String
+    metier: String
+    bio: String
+    photo: String
+    reseauxSociaux: [String!]
+    localisation: String
+  }
+
+  type Mutation {
+    login(username: String!, password: String!): AuthPayload!
+    updateProfil(input: UpdateProfilInput!): Profil!
+  }
 `;

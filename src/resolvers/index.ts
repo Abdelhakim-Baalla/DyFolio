@@ -1,4 +1,7 @@
 const Models = require('../models');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const Joi = require('joi');
 
 export const resolvers = {
   Query: {
@@ -143,30 +146,44 @@ export const resolvers = {
         const payload = (context && (context.user || context.utilisateur)) || null;
         const utilisateurId = payload && (payload.id || payload._id || payload.userId || payload.utilisateurId);
 
-        let profil;
+        // Try to load the profile of the authenticated user first
+        let profil = null;
         if (utilisateurId) {
           profil = await Profil.findOne({ utilisateur: utilisateurId }).lean();
         }
-        
+
+        // If no user profile, try to return a public/default profile (first found)
         if (!profil) {
           profil = await Profil.findOne({}).lean();
         }
 
+        // If still no profile, return an empty but valid Profil object to respect GraphQL non-nullable contract
+        const defaultProfil = {
+          nom: '',
+          prenom: '',
+          metier: '',
+          bio: '',
+          photo: '',
+          reseauxSociaux: [],
+          localisation: '',
+        };
+
         if (!profil) {
           return {
-            profil: '',
+            profil: defaultProfil,
             projets: [],
             competences: [],
             experiences: [],
           };
         }
 
-        const ownerId = profil.utilisateur || utilisateurId || null;
+        // Determine ownerId deterministically
+        const ownerId = profil.utilisateur ? profil.utilisateur : (utilisateurId || null);
 
         const [projets, competences, experiences] = await Promise.all([
-          Projet.find({ utilisateur: ownerId }).populate('competences', 'nom').lean(),
-          Competence.find({ utilisateur: ownerId }).populate('categorie', 'nom').lean(),
-          Experience.find({ utilisateur: ownerId }).lean(),
+          ownerId ? Projet.find({ utilisateur: ownerId }).populate('competences', 'nom').lean() : [],
+          ownerId ? Competence.find({ utilisateur: ownerId }).populate('categorie', 'nom').lean() : [],
+          ownerId ? Experience.find({ utilisateur: ownerId }).lean() : [],
         ]);
 
         const mappedProjets = (projets || []).map((p: any) => ({
@@ -194,8 +211,19 @@ export const resolvers = {
           dateFin: e.dateFin ? new Date(e.dateFin).toISOString() : null,
         }));
 
+        // Ensure returned profil matches GraphQL Profil type (no-null fields)
+        const returnedProfil = {
+          nom: profil.nom || '',
+          prenom: profil.prenom || '',
+          metier: profil.metier || '',
+          bio: profil.bio || '',
+          photo: profil.photo || '',
+          reseauxSociaux: profil.reseauxSociaux || [],
+          localisation: profil.localisation || '',
+        };
+
         return {
-          profil: profil,
+          profil: returnedProfil,
           projets: mappedProjets,
           competences: mappedCompetences,
           experiences: mappedExperiences,
@@ -206,4 +234,32 @@ export const resolvers = {
       }
     },
   },
+  Mutation: {
+    login: async (_parent: any, args: any) => {
+      try {
+        const { username, password } = args;
+        const Utilisateur = Models.Utilisateur;
+
+        const user = await Utilisateur.findOne({ $or: [{ email: username }, { username: username }] });
+        if (!user) {
+          throw new Error('Email ou username invalide');
+        }
+
+        const ok = await bcrypt.compare(password, user.password);
+        if (!ok) {
+          throw new Error('Email ou mot de passe invalide');
+        }
+
+        const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+        return {
+          token,
+          user: { id: user._id.toString(), username: user.username, email: user.email },
+        };
+      } catch (err: any) {
+        console.error('Erreur login resolver:', err?.message || err);
+        throw new Error(err.message || 'Erreur lors de la connexion');
+      }
+    },
+  }
 };
