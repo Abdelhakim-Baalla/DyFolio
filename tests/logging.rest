@@ -1,0 +1,45 @@
+### Test de la journalisation
+
+# 1. Inscription d'un utilisateur
+POST http://localhost:3895/api/v1/register
+Content-Type: application/json
+
+{
+  "username": "testlogger",
+  "email": "testlogger@example.com",
+  "password": "password123"
+}
+
+###
+
+# 2. Connexion avec mauvais mot de passe (doit logger un warning)
+POST http://localhost:3895/api/v1/login
+Content-Type: application/json
+
+{
+  "email": "testlogger@example.com",
+  "password": "wrongpassword"
+}
+
+###
+
+# 3. Connexion réussie
+POST http://localhost:3895/api/v1/login
+Content-Type: application/json
+
+{
+  "email": "testlogger@example.com",
+  "password": "password123"
+}
+
+###
+
+# 4. Tentative d'inscription avec email existant (doit logger un warning)
+POST http://localhost:3895/api/v1/register
+Content-Type: application/json
+
+{
+  "username": "testlogger2",
+  "email": "testlogger@example.com",
+  "password": "password456"
+}
