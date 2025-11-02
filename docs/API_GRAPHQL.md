@@ -98,14 +98,39 @@ mutation {
 
 ---
 
-### 4. 💼 Expériences
+### 4. 💼 CRUD Expériences
 
-Récupérer les expériences professionnelles.
+Gérer les expériences professionnelles du portfolio.
 
 #### Queries:
 - `getExperiences` - Récupérer toutes les expériences
+- `getExperience(id)` - Récupérer une expérience spécifique
 
-⚠️ **Note:** Le CRUD complet pour les expériences n'est pas encore implémenté.
+#### Mutations:
+- `createExperience(input)` - Créer une nouvelle expérience
+- `updateExperience(id, input)` - Mettre à jour une expérience
+- `deleteExperience(id)` - Supprimer une expérience
+
+📖 **Documentation complète:** [`docs/CRUD_EXPERIENCES.md`](./CRUD_EXPERIENCES.md)  
+🧪 **Tests:** [`tests/experiences.rest`](../tests/experiences.rest)
+
+**Exemple rapide:**
+```graphql
+# Créer une expérience
+mutation {
+  createExperience(input: {
+    poste: "Développeur Full Stack"
+    entreprise: "Tech Company"
+    description: "Développement d'applications web"
+    dateDebut: "2023-01-15"
+    dateFin: "2024-06-30"
+  }) {
+    id
+    poste
+    entreprise
+  }
+}
+```
 
 ---
 
@@ -181,7 +206,7 @@ Le schéma complet est disponible dans [`src/schema/index.ts`](../src/schema/ind
 - **Projet** - Projet du portfolio avec titre, description, liens, images
 - **Competence** - Compétence technique avec nom, niveau (0-100) et catégorie
 - **Categorie** - Catégorie pour organiser les compétences
-- **Experience** - Expérience professionnelle
+- **Experience** - Expérience professionnelle avec poste, entreprise, dates
 
 ---
 
@@ -199,6 +224,7 @@ Pour utiliser les tests:
 - [`tests/graphql.rest`](../tests/graphql.rest) - Tests généraux
 - [`tests/projets.rest`](../tests/projets.rest) - Tests CRUD Projets
 - [`tests/competences.rest`](../tests/competences.rest) - Tests CRUD Compétences
+- [`tests/experiences.rest`](../tests/experiences.rest) - Tests CRUD Expériences
 
 ---
 
@@ -251,7 +277,9 @@ tests/
 ## 🚀 Prochaines fonctionnalités
 
 - [ ] CRUD Catégories
-- [ ] CRUD Expériences
+- [x] ~~CRUD Projets~~ ✅ Complété
+- [x] ~~CRUD Compétences~~ ✅ Complété
+- [x] ~~CRUD Expériences~~ ✅ Complété
 - [ ] Upload d'images
 - [ ] Pagination des résultats
 - [ ] Filtres et recherche
