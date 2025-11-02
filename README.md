@@ -1,5 +1,12 @@
 # DyFolio
 
+[![CI/CD Pipeline](https://github.com/Abdelhakim-Baalla/DyFolio/actions/workflows/ci.yml/badge.svg)](https://github.com/Abdelhakim-Baalla/DyFolio/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/Abdelhakim-Baalla/DyFolio/branch/main/graph/badge.svg)](https://codecov.io/gh/Abdelhakim-Baalla/DyFolio)
+[![Docker Image](https://img.shields.io/docker/v/abdelhakimbaalla/dyfolio-api?label=docker&logo=docker)](https://hub.docker.com/r/abdelhakimbaalla/dyfolio-api)
+[![Node.js Version](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen?logo=node.js)](https://nodejs.org)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-blue?logo=typescript)](https://www.typescriptlang.org/)
+[![License](https://img.shields.io/badge/license-ISC-blue.svg)](LICENSE)
+
 API Portfolio dynamique avec GraphQL et REST - Gérez vos compétences, expériences et projets professionnels.
 
 ## Description
