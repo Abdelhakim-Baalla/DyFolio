@@ -64,12 +64,21 @@ Content-Type: application/json
   "query": "query { getPortfolio { profil { bio nom prenom metier photo localisation } projets { titre description lienDemo lienCode } competences { nom niveau categorie { nom } } experiences { entreprise poste description dateDebut dateFin } } }"
 }
 
-### GraphQL Mutation - login (utiliser si vous voulez tester la mutation GraphQL au lieu du endpoint REST)
+### GraphQL Mutation - login
 POST http://localhost:3895/graphql
 Content-Type: application/json
 
 {
   "query": "mutation { login(username:\"abdelhakimbaalla50@gmail.com\", password:\"123456789\") { token user { id username email } } }"
+}
+
+### GraphQL Mutation - register
+POST http://localhost:3895/graphql
+Content-Type: application/json
+
+{
+  "query": "mutation ($input: RegisterInput!) { register(input: $input) { token user { id username email } } }",
+  "variables": { "input": { "username": "testuser", "email": "test@example.com", "password": "password123" } }
 }
 
 ### GraphQL Mutation - updateProfil

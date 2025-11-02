@@ -261,5 +261,35 @@ export const resolvers = {
         throw new Error(err.message || 'Erreur lors de la connexion');
       }
     },
+
+    register: async (_parent: any, args: any) => {
+      try {
+        const { username, email, password } = args.input;
+        const Utilisateur = Models.Utilisateur;
+
+        const existing = await Utilisateur.findOne({ $or: [{ email }, { username }] });
+        if (existing) {
+          throw new Error('Utilisateur déjà existant avec cet email ou username');
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const newUser = await Utilisateur.create({
+          username,
+          email,
+          password: hashedPassword,
+        });
+
+        const token = jwt.sign({ id: newUser._id, email: newUser.email }, process.env.JWT_SECRET, { expiresIn: '7d' });
+
+        return {
+          token,
+          user: { id: newUser._id.toString(), username: newUser.username, email: newUser.email },
+        };
+      } catch (err: any) {
+        console.error('Erreur register resolver:', err?.message || err);
+        throw new Error(err.message || 'Erreur lors de l\'inscription');
+      }
+    },
   }
 };

@@ -77,8 +77,15 @@ export const typeDefs = gql`
     localisation: String
   }
 
+  input RegisterInput {
+    username: String!
+    email: String!
+    password: String!
+  }
+
   type Mutation {
     login(username: String!, password: String!): AuthPayload!
     updateProfil(input: UpdateProfilInput!): Profil!
+    register(input: RegisterInput!): AuthPayload!
   }
 `;
