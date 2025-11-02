@@ -13,11 +13,13 @@ export const typeDefs = gql`
   }
 
   type Categorie {
+    id: ID!
     nom: String!
     description: String
   }
 
   type Competence {
+    id: ID!
     nom: String!
     niveau: Int!
     categorie: Categorie
@@ -55,6 +57,7 @@ export const typeDefs = gql`
     getProjets: [Projet!]!
     getProjet(id: ID!): Projet
     getCompetences: [Competence!]!
+    getCompetence(id: ID!): Competence
     getExperiences: [Experience!]!
   }
 
@@ -106,6 +109,18 @@ export const typeDefs = gql`
     competences: [ID!]
   }
 
+  input CreateCompetenceInput {
+    nom: String!
+    niveau: Int!
+    categorie: ID!
+  }
+
+  input UpdateCompetenceInput {
+    nom: String
+    niveau: Int
+    categorie: ID
+  }
+
   type Mutation {
     login(username: String!, password: String!): AuthPayload!
     updateProfil(input: UpdateProfilInput!): Profil!
@@ -113,5 +128,8 @@ export const typeDefs = gql`
     createProjet(input: CreateProjetInput!): Projet!
     updateProjet(id: ID!, input: UpdateProjetInput!): Projet!
     deleteProjet(id: ID!): Boolean!
+    createCompetence(input: CreateCompetenceInput!): Competence!
+    updateCompetence(id: ID!, input: UpdateCompetenceInput!): Competence!
+    deleteCompetence(id: ID!): Boolean!
   }
 `;
