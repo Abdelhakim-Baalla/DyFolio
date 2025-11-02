@@ -1,4 +1,4 @@
-@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5MDYxNTg4NmFlMjBmMzNiYzM5YmIxNyIsImVtYWlsIjoiYWJkZWxoYWtpbWJhYWxsYTUwQGdtYWlsLmNvbSIsImlhdCI6MTc2MjAwNjQxOCwiZXhwIjoxNzYyNjExMjE4fQ.yTt-bRNnX8C2vCp9Gai6N39Vv_FuqpN0-L4kYiXoC04
+@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5MDYxNTg4NmFlMjBmMzNiYzM5YmIxNyIsImVtYWlsIjoiYWJkZWxoYWtpbWJhYWxsYTUwQGdtYWlsLmNvbSIsImlhdCI6MTc2MjA5NTMxNCwiZXhwIjoxNzYyMDk4OTE0fQ.AAlvcvg2bBUvy_QOy10VjK7Jr6OucJXsfPv2CDscRCE
 
 ### Authenticated - getProfil (avec Authorization header)
 POST http://localhost:3895/graphql
@@ -62,4 +62,31 @@ Content-Type: application/json
 
 {
   "query": "query { getPortfolio { profil { bio nom prenom metier photo localisation } projets { titre description lienDemo lienCode } competences { nom niveau categorie { nom } } experiences { entreprise poste description dateDebut dateFin } } }"
+}
+
+### GraphQL Mutation - login
+POST http://localhost:3895/graphql
+Content-Type: application/json
+
+{
+  "query": "mutation { login(username:\"abdelhakimbaalla50@gmail.com\", password:\"123456789\") { token user { id username email } } }"
+}
+
+### GraphQL Mutation - register
+POST http://localhost:3895/graphql
+Content-Type: application/json
+
+{
+  "query": "mutation ($input: RegisterInput!) { register(input: $input) { token user { id username email } } }",
+  "variables": { "input": { "username": "testuser", "email": "test@example.com", "password": "password123", "nom": "Test", "prenom": "User", "metier": "Développeur" } }
+}
+
+### GraphQL Mutation - updateProfil
+POST http://localhost:3895/graphql
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+{
+  "query": "mutation ($input: UpdateProfilInput!) { updateProfil(input: $input) { nom prenom metier bio photo reseauxSociaux localisation } }",
+  "variables": { "input": { "bio": "Je suis développeur full-stack", "localisation": "Maroc", "reseauxSociaux": ["x.com/Abdelhakim99891", "linkedin.com/in/abdelhakim-baalla"] } }
 }
