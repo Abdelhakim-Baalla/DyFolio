@@ -30,10 +30,10 @@ Valeurs possibles : `error`, `warn`, `info`, `debug`
 ## Exemples de logs
 
 ### Authentification
-- ✅ Inscription réussie
-- ❌ Email déjà existant
-- ✅ Connexion réussie
-- ❌ Mot de passe invalide
+- [OK] Inscription réussie
+- [ERREUR] Email déjà existant
+- [OK] Connexion réussie
+- [ERREUR] Mot de passe invalide
 
 ### Requêtes HTTP
 Toutes les requêtes HTTP sont loggées avec Morgan (méthode, URL, statut, temps de réponse)

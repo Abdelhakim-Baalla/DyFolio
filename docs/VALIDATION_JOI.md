@@ -1,6 +1,6 @@
 # Documentation de Validation Joi
 
-## 📋 Table des matières
+##  Table des matières
 
 - [Vue d'ensemble](#vue-densemble)
 - [Installation](#installation)
@@ -14,21 +14,21 @@
 
 ---
 
-## 🎯 Vue d'ensemble
+##  Vue d'ensemble
 
 La validation Joi a été intégrée dans tous les resolvers GraphQL pour garantir l'intégrité des données avant leur traitement. Chaque input est validé selon des règles strictes avec des messages d'erreur personnalisés en français.
 
 ### Avantages
 
-✅ **Validation précoce** : Les erreurs sont détectées avant l'accès à la base de données
-✅ **Messages clairs** : Messages d'erreur en français, faciles à comprendre
-✅ **Type safety** : Validation des types, formats et contraintes
-✅ **Sécurité** : Protection contre les données malformées
-✅ **Cohérence** : Règles uniformes sur toutes les entités
+[OK] **Validation précoce** : Les erreurs sont détectées avant l'accès à la base de données
+[OK] **Messages clairs** : Messages d'erreur en français, faciles à comprendre
+[OK] **Type safety** : Validation des types, formats et contraintes
+[OK] **Sécurité** : Protection contre les données malformées
+[OK] **Cohérence** : Règles uniformes sur toutes les entités
 
 ---
 
-## 📦 Installation
+##  Installation
 
 ```bash
 npm install joi
@@ -38,7 +38,7 @@ npm install joi
 
 ---
 
-## 📁 Structure des validateurs
+##  Structure des validateurs
 
 ```
 src/
@@ -51,7 +51,7 @@ src/
 
 ---
 
-## 🎨 Validateurs Projets
+##  Validateurs Projets
 
 ### `createProjetSchema`
 
@@ -101,7 +101,7 @@ Validation pour l'ID d'un projet.
 
 ---
 
-## 💡 Validateurs Compétences
+##  Validateurs Compétences
 
 ### `createCompetenceSchema`
 
@@ -147,7 +147,7 @@ Validation pour l'ID d'une compétence (même règles que `projetIdSchema`).
 
 ---
 
-## 🏢 Validateurs Expériences
+##  Validateurs Expériences
 
 ### `createExperienceSchema`
 
@@ -203,7 +203,7 @@ Validation pour l'ID d'une expérience (même règles que `projetIdSchema`).
 
 ---
 
-## 🔌 Intégration dans les Resolvers
+##  Intégration dans les Resolvers
 
 ### Import des validateurs
 
@@ -244,15 +244,15 @@ if (idError) {
 
 ### Ordre d'exécution dans les resolvers
 
-1. ✅ Extraction du token JWT et validation de l'authentification
-2. ✅ **Validation Joi des données d'entrée** (nouveau)
-3. ✅ Vérification des permissions (ownership)
-4. ✅ Opération sur la base de données
-5. ✅ Retour de la réponse
+1. [OK] Extraction du token JWT et validation de l'authentification
+2. [OK] **Validation Joi des données d'entrée** (nouveau)
+3. [OK] Vérification des permissions (ownership)
+4. [OK] Opération sur la base de données
+5. [OK] Retour de la réponse
 
 ---
 
-## 💬 Messages d'erreur personnalisés
+##  Messages d'erreur personnalisés
 
 Tous les validateurs utilisent des messages d'erreur en français pour une meilleure expérience utilisateur.
 
@@ -303,7 +303,7 @@ Au moins un champ doit être fourni pour la mise à jour
 
 ---
 
-## 📏 Règles de validation
+##  Règles de validation
 
 ### Règles communes
 
@@ -396,18 +396,18 @@ Pour des règles métier complexes :
 
 ---
 
-## 🧪 Tests de validation
+##  Tests de validation
 
 ### Scénarios testés
 
-1. ✅ **Création avec données valides** : Succès
-2. ✅ **Création avec champ manquant** : Erreur avec message explicite
-3. ✅ **Création avec type invalide** : Erreur de type
-4. ✅ **Création avec longueur invalide** : Erreur de longueur
-5. ✅ **Update avec au moins un champ** : Succès
-6. ✅ **Update sans aucun champ** : Erreur "au moins un champ requis"
-7. ✅ **ID invalide** : Erreur de format
-8. ✅ **Date de fin avant date de début** : Erreur de validation personnalisée
+1. [OK] **Création avec données valides** : Succès
+2. [OK] **Création avec champ manquant** : Erreur avec message explicite
+3. [OK] **Création avec type invalide** : Erreur de type
+4. [OK] **Création avec longueur invalide** : Erreur de longueur
+5. [OK] **Update avec au moins un champ** : Succès
+6. [OK] **Update sans aucun champ** : Erreur "au moins un champ requis"
+7. [OK] **ID invalide** : Erreur de format
+8. [OK] **Date de fin avant date de début** : Erreur de validation personnalisée
 
 ### Exemple de test dans REST Client
 
@@ -435,46 +435,46 @@ Authorization: Bearer YOUR_TOKEN
 
 ---
 
-## 🎯 Résumé des validations par entité
+##  Résumé des validations par entité
 
 ### Projets
 
 | Champ | Type | Contraintes | Requis |
 |-------|------|-------------|--------|
-| titre | String | 3-100 car. | ✅ Create |
-| description | String | 10-2000 car. | ✅ Create |
-| technologies | Array[String] | Min 1 élément | ✅ Create |
-| lienGithub | URL | Format URL | ❌ |
-| lienDemo | URL | Format URL | ❌ |
-| images | Array[URL] | Format URL | ❌ |
-| competences | Array[ObjectId] | Format MongoDB | ❌ |
+| titre | String | 3-100 car. | [OK] Create |
+| description | String | 10-2000 car. | [OK] Create |
+| technologies | Array[String] | Min 1 élément | [OK] Create |
+| lienGithub | URL | Format URL | [ERREUR] |
+| lienDemo | URL | Format URL | [ERREUR] |
+| images | Array[URL] | Format URL | [ERREUR] |
+| competences | Array[ObjectId] | Format MongoDB | [ERREUR] |
 
 ### Compétences
 
 | Champ | Type | Contraintes | Requis |
 |-------|------|-------------|--------|
-| nom | String | 2-50 car. | ✅ Create |
-| niveau | Integer | 1-5 | ✅ Create |
-| categorie | ObjectId | Format MongoDB | ✅ Create |
-| description | String | 10-500 car. | ❌ |
-| icone | URL | Format URL | ❌ |
+| nom | String | 2-50 car. | [OK] Create |
+| niveau | Integer | 1-5 | [OK] Create |
+| categorie | ObjectId | Format MongoDB | [OK] Create |
+| description | String | 10-500 car. | [ERREUR] |
+| icone | URL | Format URL | [ERREUR] |
 
 ### Expériences
 
 | Champ | Type | Contraintes | Requis |
 |-------|------|-------------|--------|
-| poste | String | 3-100 car. | ✅ Create |
-| entreprise | String | 2-100 car. | ✅ Create |
-| description | String | 10-2000 car. | ✅ Create |
-| dateDebut | Date ISO | Format ISO 8601 | ❌ |
-| dateFin | Date ISO | Format ISO 8601, > dateDebut | ❌ |
-| lieu | String | 2-100 car. | ❌ |
-| type | Enum | CDI/CDD/Stage/Freelance/Alternance | ❌ |
-| competences | Array[ObjectId] | Format MongoDB | ❌ |
+| poste | String | 3-100 car. | [OK] Create |
+| entreprise | String | 2-100 car. | [OK] Create |
+| description | String | 10-2000 car. | [OK] Create |
+| dateDebut | Date ISO | Format ISO 8601 | [ERREUR] |
+| dateFin | Date ISO | Format ISO 8601, > dateDebut | [ERREUR] |
+| lieu | String | 2-100 car. | [ERREUR] |
+| type | Enum | CDI/CDD/Stage/Freelance/Alternance | [ERREUR] |
+| competences | Array[ObjectId] | Format MongoDB | [ERREUR] |
 
 ---
 
-## 🔒 Sécurité
+##  Sécurité
 
 La validation Joi ajoute une couche de sécurité importante :
 
@@ -486,16 +486,16 @@ La validation Joi ajoute une couche de sécurité importante :
 
 ---
 
-## 📝 Notes importantes
+##  Notes importantes
 
-1. ⚠️ **Option `abortEarly: false`** : Permet de retourner toutes les erreurs en une fois, pas seulement la première
-2. ⚠️ **Validation avant authentification** : Non, l'authentification est vérifiée en premier pour des raisons de sécurité
-3. ⚠️ **Validation côté client** : Cette validation est côté serveur. Pensez à ajouter aussi une validation côté client pour une meilleure UX
-4. ⚠️ **Performance** : La validation Joi est rapide, mais elle ajoute un léger overhead. C'est un compromis acceptable pour la sécurité
+1. [ATTENTION] **Option `abortEarly: false`** : Permet de retourner toutes les erreurs en une fois, pas seulement la première
+2. [ATTENTION] **Validation avant authentification** : Non, l'authentification est vérifiée en premier pour des raisons de sécurité
+3. [ATTENTION] **Validation côté client** : Cette validation est côté serveur. Pensez à ajouter aussi une validation côté client pour une meilleure UX
+4. [ATTENTION] **Performance** : La validation Joi est rapide, mais elle ajoute un léger overhead. C'est un compromis acceptable pour la sécurité
 
 ---
 
-## 🚀 Prochaines étapes
+##  Prochaines étapes
 
 - [ ] Ajouter des validateurs pour les Catégories
 - [ ] Implémenter la validation du Profil

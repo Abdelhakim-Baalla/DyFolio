@@ -1,6 +1,6 @@
 # Résumé de l'implémentation CRUD Compétences
 
-## ✅ Modifications effectuées
+## [OK] Modifications effectuées
 
 ### 1. Schema GraphQL (`src/schema/index.ts`)
 
@@ -23,30 +23,30 @@
 ### 2. Resolvers (`src/resolvers/index.ts`)
 
 **Query Resolvers:**
-- ✅ `getCompetences` - Mis à jour pour retourner l'`id` et l'`id` de la catégorie
-- ✅ `getCompetence` - Nouveau resolver pour récupérer une compétence par ID
-- ✅ `getPortfolio` - Mis à jour pour inclure l'`id` dans les compétences
+- [OK] `getCompetences` - Mis à jour pour retourner l'`id` et l'`id` de la catégorie
+- [OK] `getCompetence` - Nouveau resolver pour récupérer une compétence par ID
+- [OK] `getPortfolio` - Mis à jour pour inclure l'`id` dans les compétences
 
 **Mutation Resolvers:**
-- ✅ `createCompetence` - Créer une nouvelle compétence avec validation d'authentification
-- ✅ `updateCompetence` - Mettre à jour une compétence avec vérification de propriété
-- ✅ `deleteCompetence` - Supprimer une compétence avec vérification de propriété
+- [OK] `createCompetence` - Créer une nouvelle compétence avec validation d'authentification
+- [OK] `updateCompetence` - Mettre à jour une compétence avec vérification de propriété
+- [OK] `deleteCompetence` - Supprimer une compétence avec vérification de propriété
 
 ### 3. Documentation et Tests
 
 **Fichiers créés:**
-- ✅ `tests/competences.rest` - Tests REST Client pour toutes les opérations CRUD
-- ✅ `docs/CRUD_COMPETENCES.md` - Documentation complète du CRUD avec exemples
+- [OK] `tests/competences.rest` - Tests REST Client pour toutes les opérations CRUD
+- [OK] `docs/CRUD_COMPETENCES.md` - Documentation complète du CRUD avec exemples
 
-## 🔒 Sécurité implémentée
+##  Sécurité implémentée
 
-- ✅ Authentification obligatoire pour toutes les opérations
-- ✅ Isolation des données par utilisateur
-- ✅ Vérification de propriété pour update/delete
-- ✅ Gestion des erreurs appropriée
-- ✅ Population de la catégorie dans les réponses
+- [OK] Authentification obligatoire pour toutes les opérations
+- [OK] Isolation des données par utilisateur
+- [OK] Vérification de propriété pour update/delete
+- [OK] Gestion des erreurs appropriée
+- [OK] Population de la catégorie dans les réponses
 
-## 🚀 Comment tester
+##  Comment tester
 
 ### 1. Démarrer le serveur
 ```bash
@@ -134,7 +134,7 @@ mutation {
 }
 ```
 
-## 📊 Modèle de données
+##  Modèle de données
 
 ### Competence
 - `nom` (String, requis) - Nom de la compétence (ex: "React", "Node.js")
@@ -147,14 +147,14 @@ mutation {
 - Une compétence appartient à **un utilisateur**
 - Une compétence peut être utilisée par **plusieurs projets**
 
-## 📝 Notes importantes
+##  Notes importantes
 
 1. **Authentification:** Toutes les requêtes nécessitent un header `Authorization: Bearer <token>`
 2. **Catégorie obligatoire:** Une compétence doit obligatoirement être associée à une catégorie
 3. **Niveau:** Le niveau doit être un nombre entier (généralement entre 0 et 100)
 4. **Permissions:** Un utilisateur ne peut modifier/supprimer que ses propres compétences
 
-## 🔧 Différences avec le CRUD Projets
+##  Différences avec le CRUD Projets
 
 | Aspect | Projets | Compétences |
 |--------|---------|-------------|
@@ -163,7 +163,7 @@ mutation {
 | Validation | titre requis | nom, niveau, categorie requis |
 | Population | competences.nom | categorie.nom |
 
-## 🎯 Prochaines étapes possibles
+##  Prochaines étapes possibles
 
 - [ ] Créer un CRUD pour les Catégories
 - [ ] Ajouter la validation avec Joi pour les inputs
@@ -173,14 +173,14 @@ mutation {
 - [ ] Permettre de trier par nom ou niveau
 - [ ] Ajouter des tests unitaires
 
-## 🔗 Intégration avec les autres modules
+##  Intégration avec les autres modules
 
 Les compétences sont déjà intégrées avec:
-- ✅ **Projets** - Un projet peut avoir plusieurs compétences
-- ✅ **Portfolio** - Le portfolio affiche toutes les compétences de l'utilisateur
+- [OK] **Projets** - Un projet peut avoir plusieurs compétences
+- [OK] **Portfolio** - Le portfolio affiche toutes les compétences de l'utilisateur
 - ⏳ **Catégories** - Les compétences sont organisées par catégories (CRUD à implémenter)
 
-## 📚 Ressources
+##  Ressources
 
 - Documentation complète: `docs/CRUD_COMPETENCES.md`
 - Fichier de tests: `tests/competences.rest`
