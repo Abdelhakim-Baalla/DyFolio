@@ -303,5 +303,33 @@ export const resolvers = {
         throw new Error(err.message || 'Erreur lors de l\'inscription');
       }
     },
-  }
+
+    updateProfil: async (_parent: any, args: any, context: any) => {
+      try {
+        const Profil = Models.Profil;
+
+        const payload = (context && (context.user || context.utilisateur)) || null;
+        const utilisateurId = payload && (payload.id || payload._id || payload.userId || payload.utilisateurId);
+
+        if (!utilisateurId) {
+          throw new Error('Utilisateur non authentifié');
+        }
+
+        const updatedProfil = await Profil.findOneAndUpdate(
+          { utilisateur: utilisateurId },
+          { ...args.input },
+          { new: true }
+        );
+
+        if (!updatedProfil) {
+          throw new Error('Profil non trouvé');
+        }
+
+        return updatedProfil;
+      } catch (err: any) {
+        console.error('Erreur updateProfil resolver:', err?.message || err);
+        throw new Error(err.message || 'Erreur lors de la mise à jour du profil');
+      }
+    },
+  },
 };

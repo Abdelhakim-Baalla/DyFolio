@@ -88,5 +88,5 @@ Content-Type: application/json
 
 {
   "query": "mutation ($input: UpdateProfilInput!) { updateProfil(input: $input) { nom prenom metier bio photo reseauxSociaux localisation } }",
-  "variables": { "input": { "nom": "Baalla", "prenom": "Abdelhakim", "metier": "Dev", "bio": "Updated bio", "reseauxSociaux": ["twitter.com/abdel"], "localisation": "Maroc" } }
+  "variables": { "input": { "bio": "Je suis développeur full-stack", "localisation": "Maroc", "reseauxSociaux": ["x.com/Abdelhakim99891", "linkedin.com/in/abdelhakim-baalla"] } }
 }
