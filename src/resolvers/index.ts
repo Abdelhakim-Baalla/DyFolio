@@ -57,6 +57,7 @@ export const resolvers = {
         }
 
         return projets.map((p: any) => ({
+          id: p._id.toString(),
           titre: p.titre || '',
           description: p.description || '',
           image: p.image || '',
@@ -72,6 +73,43 @@ export const resolvers = {
           throw err;
         }
         throw new Error('Erreur interne lors de la récupération des projets');
+      }
+    },
+    getProjet: async (_parent: any, args: any, context: any) => {
+      try {
+        const Projet = Models.Projet;
+        const { id } = args;
+
+        const payload = (context && (context.user || context.utilisateur)) || null;
+        const utilisateurId = payload && (payload.id || payload._id || payload.userId || payload.utilisateurId);
+
+        if (!utilisateurId) {
+          throw new Error('Utilisateur non authentifié');
+        }
+
+        const projet = await Projet.findOne({ _id: id, utilisateur: utilisateurId }).populate('competences', 'nom').lean();
+
+        if (!projet) {
+          throw new Error('Projet non trouvé');
+        }
+
+        return {
+          id: projet._id.toString(),
+          titre: projet.titre || '',
+          description: projet.description || '',
+          image: projet.image || '',
+          lienDemo: projet.lienDemo || '',
+          lienCode: projet.lienCode || '',
+          competences: Array.isArray(projet.competences)
+            ? projet.competences.map((c: any) => ({ nom: c && c.nom ? c.nom : '' }))
+            : [],
+        };
+      } catch (err: any) {
+        console.error('Erreur getProjet:', err?.message || err);
+        if (err instanceof Error && (err.message === 'Utilisateur non authentifié' || err.message === 'Projet non trouvé')) {
+          throw err;
+        }
+        throw new Error('Erreur interne lors de la récupération du projet');
       }
     },
     getCompetences: async (_parent: any, _args: any, context: any) => {
@@ -187,6 +225,7 @@ export const resolvers = {
         ]);
 
         const mappedProjets = (projets || []).map((p: any) => ({
+          id: p._id.toString(),
           titre: p.titre || '',
           description: p.description || '',
           image: p.image || '',
@@ -329,6 +368,118 @@ export const resolvers = {
       } catch (err: any) {
         console.error('Erreur updateProfil resolver:', err?.message || err);
         throw new Error(err.message || 'Erreur lors de la mise à jour du profil');
+      }
+    },
+
+    createProjet: async (_parent: any, args: any, context: any) => {
+      try {
+        const Projet = Models.Projet;
+
+        const payload = (context && (context.user || context.utilisateur)) || null;
+        const utilisateurId = payload && (payload.id || payload._id || payload.userId || payload.utilisateurId);
+
+        if (!utilisateurId) {
+          throw new Error('Utilisateur non authentifié');
+        }
+
+        const { titre, description, image, lienDemo, lienCode, competences } = args.input;
+
+        const newProjet = await Projet.create({
+          titre,
+          description: description || '',
+          image: image || '',
+          lienDemo: lienDemo || '',
+          lienCode: lienCode || '',
+          competences: competences || [],
+          utilisateur: utilisateurId,
+        });
+
+        const populatedProjet = await Projet.findById(newProjet._id).populate('competences', 'nom').lean();
+
+        return {
+          id: populatedProjet._id.toString(),
+          titre: populatedProjet.titre || '',
+          description: populatedProjet.description || '',
+          image: populatedProjet.image || '',
+          lienDemo: populatedProjet.lienDemo || '',
+          lienCode: populatedProjet.lienCode || '',
+          competences: Array.isArray(populatedProjet.competences)
+            ? populatedProjet.competences.map((c: any) => ({ nom: c && c.nom ? c.nom : '' }))
+            : [],
+        };
+      } catch (err: any) {
+        console.error('Erreur createProjet resolver:', err?.message || err);
+        throw new Error(err.message || 'Erreur lors de la création du projet');
+      }
+    },
+
+    updateProjet: async (_parent: any, args: any, context: any) => {
+      try {
+        const Projet = Models.Projet;
+        const { id, input } = args;
+
+        const payload = (context && (context.user || context.utilisateur)) || null;
+        const utilisateurId = payload && (payload.id || payload._id || payload.userId || payload.utilisateurId);
+
+        if (!utilisateurId) {
+          throw new Error('Utilisateur non authentifié');
+        }
+
+        const existingProjet = await Projet.findOne({ _id: id, utilisateur: utilisateurId });
+        if (!existingProjet) {
+          throw new Error('Projet non trouvé ou vous n\'avez pas les permissions');
+        }
+
+        const updatedProjet = await Projet.findByIdAndUpdate(
+          id,
+          { ...input },
+          { new: true }
+        ).populate('competences', 'nom').lean();
+
+        if (!updatedProjet) {
+          throw new Error('Erreur lors de la mise à jour du projet');
+        }
+
+        return {
+          id: updatedProjet._id.toString(),
+          titre: updatedProjet.titre || '',
+          description: updatedProjet.description || '',
+          image: updatedProjet.image || '',
+          lienDemo: updatedProjet.lienDemo || '',
+          lienCode: updatedProjet.lienCode || '',
+          competences: Array.isArray(updatedProjet.competences)
+            ? updatedProjet.competences.map((c: any) => ({ nom: c && c.nom ? c.nom : '' }))
+            : [],
+        };
+      } catch (err: any) {
+        console.error('Erreur updateProjet resolver:', err?.message || err);
+        throw new Error(err.message || 'Erreur lors de la mise à jour du projet');
+      }
+    },
+
+    deleteProjet: async (_parent: any, args: any, context: any) => {
+      try {
+        const Projet = Models.Projet;
+        const { id } = args;
+
+        const payload = (context && (context.user || context.utilisateur)) || null;
+        const utilisateurId = payload && (payload.id || payload._id || payload.userId || payload.utilisateurId);
+
+        if (!utilisateurId) {
+          throw new Error('Utilisateur non authentifié');
+        }
+
+        const existingProjet = await Projet.findOne({ _id: id, utilisateur: utilisateurId });
+        if (!existingProjet) {
+          throw new Error('Projet non trouvé ou vous n\'avez pas les permissions');
+        }
+
+        await Projet.findByIdAndDelete(id);
+
+        return true;
+      } catch (err: any) {
+        console.error('Erreur deleteProjet resolver:', err?.message || err);
+        throw new Error(err.message || 'Erreur lors de la suppression du projet');
       }
     },
   },
