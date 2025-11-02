@@ -6,8 +6,11 @@ export const typeDefs = gql`
     id: ID!
     titre: String!
     description: String
-    image: String
+    technologies: [String!]!
+    lienGithub: String
     lienDemo: String
+    images: [String!]
+    image: String
     lienCode: String
     competences: [Competence!]!
   }
@@ -23,6 +26,8 @@ export const typeDefs = gql`
     nom: String!
     niveau: Int!
     categorie: Categorie
+    description: String
+    icone: String
   }
 
   type Experience {
@@ -32,6 +37,9 @@ export const typeDefs = gql`
     description: String
     dateDebut: String
     dateFin: String
+    lieu: String
+    type: String
+    competences: [Competence!]
   }
 
 
@@ -95,9 +103,12 @@ export const typeDefs = gql`
 
   input CreateProjetInput {
     titre: String!
-    description: String
-    image: String
+    description: String!
+    technologies: [String!]!
+    lienGithub: String
     lienDemo: String
+    images: [String!]
+    image: String
     lienCode: String
     competences: [ID!]
   }
@@ -105,8 +116,11 @@ export const typeDefs = gql`
   input UpdateProjetInput {
     titre: String
     description: String
-    image: String
+    technologies: [String!]
+    lienGithub: String
     lienDemo: String
+    images: [String!]
+    image: String
     lienCode: String
     competences: [ID!]
   }
@@ -115,20 +129,27 @@ export const typeDefs = gql`
     nom: String!
     niveau: Int!
     categorie: ID!
+    description: String
+    icone: String
   }
 
   input UpdateCompetenceInput {
     nom: String
     niveau: Int
     categorie: ID
+    description: String
+    icone: String
   }
 
   input CreateExperienceInput {
     poste: String!
     entreprise: String!
-    description: String
-    dateDebut: String!
+    description: String!
+    dateDebut: String
     dateFin: String
+    lieu: String
+    type: String
+    competences: [ID!]
   }
 
   input UpdateExperienceInput {
@@ -137,6 +158,9 @@ export const typeDefs = gql`
     description: String
     dateDebut: String
     dateFin: String
+    lieu: String
+    type: String
+    competences: [ID!]
   }
 
   type Mutation {

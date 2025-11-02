@@ -3,6 +3,19 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Joi = require('joi');
 
+// Import des validateurs
+import {
+  createProjetSchema,
+  updateProjetSchema,
+  projetIdSchema,
+  createCompetenceSchema,
+  updateCompetenceSchema,
+  competenceIdSchema,
+  createExperienceSchema,
+  updateExperienceSchema,
+  experienceIdSchema
+} from '../validators';
+
 export const resolvers = {
   Query: {
     getProfil: async (_parent: any, _args: any, context: any) => {
@@ -449,7 +462,14 @@ export const resolvers = {
           throw new Error('Utilisateur non authentifié');
         }
 
-        const { titre, description, image, lienDemo, lienCode, competences } = args.input;
+        // Validation des données d'entrée
+        const { error, value } = createProjetSchema.validate(args.input, { abortEarly: false });
+        if (error) {
+          const errorMessages = error.details.map(detail => detail.message).join(', ');
+          throw new Error(`Erreur de validation: ${errorMessages}`);
+        }
+
+        const { titre, description, image, lienDemo, lienCode, competences } = value;
 
         const newProjet = await Projet.create({
           titre,
@@ -492,6 +512,19 @@ export const resolvers = {
           throw new Error('Utilisateur non authentifié');
         }
 
+        // Validation de l'ID
+        const { error: idError } = projetIdSchema.validate(id);
+        if (idError) {
+          throw new Error(`Erreur de validation: ${idError.message}`);
+        }
+
+        // Validation des données d'entrée
+        const { error, value } = updateProjetSchema.validate(input, { abortEarly: false });
+        if (error) {
+          const errorMessages = error.details.map(detail => detail.message).join(', ');
+          throw new Error(`Erreur de validation: ${errorMessages}`);
+        }
+
         const existingProjet = await Projet.findOne({ _id: id, utilisateur: utilisateurId });
         if (!existingProjet) {
           throw new Error('Projet non trouvé ou vous n\'avez pas les permissions');
@@ -499,7 +532,7 @@ export const resolvers = {
 
         const updatedProjet = await Projet.findByIdAndUpdate(
           id,
-          { ...input },
+          { ...value },
           { new: true }
         ).populate('competences', 'nom').lean();
 
@@ -536,6 +569,12 @@ export const resolvers = {
           throw new Error('Utilisateur non authentifié');
         }
 
+        // Validation de l'ID
+        const { error: idError } = projetIdSchema.validate(id);
+        if (idError) {
+          throw new Error(`Erreur de validation: ${idError.message}`);
+        }
+
         const existingProjet = await Projet.findOne({ _id: id, utilisateur: utilisateurId });
         if (!existingProjet) {
           throw new Error('Projet non trouvé ou vous n\'avez pas les permissions');
@@ -561,12 +600,21 @@ export const resolvers = {
           throw new Error('Utilisateur non authentifié');
         }
 
-        const { nom, niveau, categorie } = args.input;
+        // Validation des données d'entrée
+        const { error, value } = createCompetenceSchema.validate(args.input, { abortEarly: false });
+        if (error) {
+          const errorMessages = error.details.map(detail => detail.message).join(', ');
+          throw new Error(`Erreur de validation: ${errorMessages}`);
+        }
+
+        const { nom, niveau, categorie, description, icone } = value;
 
         const newCompetence = await Competence.create({
           nom,
           niveau,
           categorie,
+          description: description || '',
+          icone: icone || '',
           utilisateur: utilisateurId,
         });
 
@@ -596,6 +644,19 @@ export const resolvers = {
           throw new Error('Utilisateur non authentifié');
         }
 
+        // Validation de l'ID
+        const { error: idError } = competenceIdSchema.validate(id);
+        if (idError) {
+          throw new Error(`Erreur de validation: ${idError.message}`);
+        }
+
+        // Validation des données d'entrée
+        const { error, value } = updateCompetenceSchema.validate(input, { abortEarly: false });
+        if (error) {
+          const errorMessages = error.details.map(detail => detail.message).join(', ');
+          throw new Error(`Erreur de validation: ${errorMessages}`);
+        }
+
         const existingCompetence = await Competence.findOne({ _id: id, utilisateur: utilisateurId });
         if (!existingCompetence) {
           throw new Error('Compétence non trouvée ou vous n\'avez pas les permissions');
@@ -603,7 +664,7 @@ export const resolvers = {
 
         const updatedCompetence = await Competence.findByIdAndUpdate(
           id,
-          { ...input },
+          { ...value },
           { new: true }
         ).populate('categorie', 'nom').lean();
 
@@ -635,6 +696,12 @@ export const resolvers = {
           throw new Error('Utilisateur non authentifié');
         }
 
+        // Validation de l'ID
+        const { error: idError } = competenceIdSchema.validate(id);
+        if (idError) {
+          throw new Error(`Erreur de validation: ${idError.message}`);
+        }
+
         const existingCompetence = await Competence.findOne({ _id: id, utilisateur: utilisateurId });
         if (!existingCompetence) {
           throw new Error('Compétence non trouvée ou vous n\'avez pas les permissions');
@@ -660,7 +727,14 @@ export const resolvers = {
           throw new Error('Utilisateur non authentifié');
         }
 
-        const { poste, entreprise, description, dateDebut, dateFin } = args.input;
+        // Validation des données d'entrée
+        const { error, value } = createExperienceSchema.validate(args.input, { abortEarly: false });
+        if (error) {
+          const errorMessages = error.details.map(detail => detail.message).join(', ');
+          throw new Error(`Erreur de validation: ${errorMessages}`);
+        }
+
+        const { poste, entreprise, description, dateDebut, dateFin, lieu, type, competences } = value;
 
         const newExperience = await Experience.create({
           poste,
@@ -668,6 +742,9 @@ export const resolvers = {
           description: description || '',
           dateDebut: dateDebut ? new Date(dateDebut) : new Date(),
           dateFin: dateFin ? new Date(dateFin) : null,
+          lieu: lieu || '',
+          type: type || '',
+          competences: competences || [],
           utilisateur: utilisateurId,
         });
 
@@ -697,17 +774,33 @@ export const resolvers = {
           throw new Error('Utilisateur non authentifié');
         }
 
+        // Validation de l'ID
+        const { error: idError } = experienceIdSchema.validate(id);
+        if (idError) {
+          throw new Error(`Erreur de validation: ${idError.message}`);
+        }
+
+        // Validation des données d'entrée
+        const { error, value } = updateExperienceSchema.validate(input, { abortEarly: false });
+        if (error) {
+          const errorMessages = error.details.map(detail => detail.message).join(', ');
+          throw new Error(`Erreur de validation: ${errorMessages}`);
+        }
+
         const existingExperience = await Experience.findOne({ _id: id, utilisateur: utilisateurId });
         if (!existingExperience) {
           throw new Error('Expérience non trouvée ou vous n\'avez pas les permissions');
         }
 
         const updateData: any = {};
-        if (input.poste !== undefined) updateData.poste = input.poste;
-        if (input.entreprise !== undefined) updateData.entreprise = input.entreprise;
-        if (input.description !== undefined) updateData.description = input.description;
-        if (input.dateDebut !== undefined) updateData.dateDebut = new Date(input.dateDebut);
-        if (input.dateFin !== undefined) updateData.dateFin = input.dateFin ? new Date(input.dateFin) : null;
+        if (value.poste !== undefined) updateData.poste = value.poste;
+        if (value.entreprise !== undefined) updateData.entreprise = value.entreprise;
+        if (value.description !== undefined) updateData.description = value.description;
+        if (value.dateDebut !== undefined) updateData.dateDebut = new Date(value.dateDebut);
+        if (value.dateFin !== undefined) updateData.dateFin = value.dateFin ? new Date(value.dateFin) : null;
+        if (value.lieu !== undefined) updateData.lieu = value.lieu;
+        if (value.type !== undefined) updateData.type = value.type;
+        if (value.competences !== undefined) updateData.competences = value.competences;
 
         const updatedExperience = await Experience.findByIdAndUpdate(
           id,
@@ -743,6 +836,12 @@ export const resolvers = {
 
         if (!utilisateurId) {
           throw new Error('Utilisateur non authentifié');
+        }
+
+        // Validation de l'ID
+        const { error: idError } = experienceIdSchema.validate(id);
+        if (idError) {
+          throw new Error(`Erreur de validation: ${idError.message}`);
         }
 
         const existingExperience = await Experience.findOne({ _id: id, utilisateur: utilisateurId });
