@@ -3,6 +3,7 @@ import { gql } from 'graphql-tag';
 
 export const typeDefs = gql`
   type Projet {
+    id: ID!
     titre: String!
     description: String
     image: String
@@ -52,6 +53,7 @@ export const typeDefs = gql`
     getPortfolio: Portfolio!
     getProfil: Profil!
     getProjets: [Projet!]!
+    getProjet(id: ID!): Projet
     getCompetences: [Competence!]!
     getExperiences: [Experience!]!
   }
@@ -86,9 +88,30 @@ export const typeDefs = gql`
     metier: String!
   }
 
+  input CreateProjetInput {
+    titre: String!
+    description: String
+    image: String
+    lienDemo: String
+    lienCode: String
+    competences: [ID!]
+  }
+
+  input UpdateProjetInput {
+    titre: String
+    description: String
+    image: String
+    lienDemo: String
+    lienCode: String
+    competences: [ID!]
+  }
+
   type Mutation {
     login(username: String!, password: String!): AuthPayload!
     updateProfil(input: UpdateProfilInput!): Profil!
     register(input: RegisterInput!): AuthPayload!
+    createProjet(input: CreateProjetInput!): Projet!
+    updateProjet(id: ID!, input: UpdateProjetInput!): Projet!
+    deleteProjet(id: ID!): Boolean!
   }
 `;
