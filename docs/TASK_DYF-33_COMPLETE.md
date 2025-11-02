@@ -1,14 +1,14 @@
-# 🎉 Journalisation DyFolio - TERMINÉ
+#  Journalisation DyFolio - TERMINÉ
 
-## ✅ Implémentation Simple et Efficace
+## [OK] Implémentation Simple et Efficace
 
-### 📋 Résumé
+###  Résumé
 
 La journalisation est maintenant **active et opérationnelle** dans DyFolio. Tous les événements importants sont automatiquement enregistrés dans la console et dans des fichiers persistants.
 
 ---
 
-## 🔧 Composants créés
+##  Composants créés
 
 ### 1. Logger Winston (`src/config/logger.ts`)
 ```typescript
@@ -24,7 +24,7 @@ Capture automatiquement toutes les requêtes HTTP et les redirige vers Winston.
 
 ---
 
-## 📊 Types de logs enregistrés
+##  Types de logs enregistrés
 
 | Niveau | Usage | Exemples |
 |--------|-------|----------|
@@ -34,13 +34,13 @@ Capture automatiquement toutes les requêtes HTTP et les redirige vers Winston.
 
 ---
 
-## 🎯 Où sont les logs ?
+##  Où sont les logs ?
 
 ### Console (Développement)
 ```
-✅ 2025-11-02 18:45:28 info: Serveur en marche sur http://localhost:3895
-⚠️  2025-11-02 18:47:10 warn: Email déjà existant
-❌ 2025-11-02 18:48:00 error: Erreur lors de l'inscription
+[OK] 2025-11-02 18:45:28 info: Serveur en marche sur http://localhost:3895
+[ATTENTION]  2025-11-02 18:47:10 warn: Email déjà existant
+[ERREUR] 2025-11-02 18:48:00 error: Erreur lors de l'inscription
 ```
 
 ### Fichiers (Production)
@@ -49,7 +49,7 @@ Capture automatiquement toutes les requêtes HTTP et les redirige vers Winston.
 
 ---
 
-## 🚀 Comment tester ?
+##  Comment tester ?
 
 ### 1. Démarrer le serveur
 ```bash
@@ -58,10 +58,10 @@ npm run dev
 
 ### 2. Utiliser les tests REST
 Ouvrir `tests/logging.rest` et exécuter les requêtes :
-- ✅ Inscription → Log INFO
-- ❌ Mauvais mot de passe → Log WARN
-- ✅ Connexion → Log INFO
-- ⚠️ Email existant → Log WARN
+- [OK] Inscription → Log INFO
+- [ERREUR] Mauvais mot de passe → Log WARN
+- [OK] Connexion → Log INFO
+- [ATTENTION] Email existant → Log WARN
 
 ### 3. Consulter les logs
 ```bash
@@ -74,9 +74,9 @@ type logs\error.log
 
 ---
 
-## 📂 Fichiers créés/modifiés
+##  Fichiers créés/modifiés
 
-### ✨ Nouveaux fichiers
+###  Nouveaux fichiers
 ```
 src/config/logger.ts           ← Configuration Winston
 src/utils/morganStream.ts      ← Stream pour Morgan
@@ -89,7 +89,7 @@ docs/RECAP_JOURNALISATION.md
 .env.example                   ← Config exemple
 ```
 
-### 🔄 Fichiers modifiés
+###  Fichiers modifiés
 ```
 src/index.ts                   ← Ajout logger + Morgan
 src/controllers/auth.ts        ← Remplacement console.log
@@ -97,7 +97,7 @@ src/controllers/auth.ts        ← Remplacement console.log
 
 ---
 
-## 💡 Utilisation dans le code
+##  Utilisation dans le code
 
 ### Simple et direct
 ```typescript
@@ -115,17 +115,17 @@ logger.error('Erreur critique', error);
 
 ---
 
-## 🎊 Résultat
+##  Résultat
 
-✅ **Tous les logs sont centralisés**
-✅ **Console colorée en développement**
-✅ **Fichiers persistants pour la production**
-✅ **Rotation automatique (5MB max)**
-✅ **Stack traces complètes pour les erreurs**
-✅ **Logs HTTP automatiques via Morgan**
+[OK] **Tous les logs sont centralisés**
+[OK] **Console colorée en développement**
+[OK] **Fichiers persistants pour la production**
+[OK] **Rotation automatique (5MB max)**
+[OK] **Stack traces complètes pour les erreurs**
+[OK] **Logs HTTP automatiques via Morgan**
 
 ---
 
-## 📦 Task DYF-33 : COMPLÉTÉE ✅
+##  Task DYF-33 : COMPLÉTÉE [OK]
 
-La journalisation est **simple**, **efficace** et **production-ready** ! 🚀
+La journalisation est **simple**, **efficace** et **production-ready** ! 

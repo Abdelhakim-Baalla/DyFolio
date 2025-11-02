@@ -1,6 +1,6 @@
 # Résumé de l'implémentation CRUD Projets
 
-## ✅ Modifications effectuées
+## [OK] Modifications effectuées
 
 ### 1. Schema GraphQL (`src/schema/index.ts`)
 
@@ -22,29 +22,29 @@
 ### 2. Resolvers (`src/resolvers/index.ts`)
 
 **Query Resolvers:**
-- ✅ `getProjets` - Mis à jour pour retourner l'`id`
-- ✅ `getProjet` - Nouveau resolver pour récupérer un projet par ID
-- ✅ `getPortfolio` - Mis à jour pour inclure l'`id` dans les projets
+- [OK] `getProjets` - Mis à jour pour retourner l'`id`
+- [OK] `getProjet` - Nouveau resolver pour récupérer un projet par ID
+- [OK] `getPortfolio` - Mis à jour pour inclure l'`id` dans les projets
 
 **Mutation Resolvers:**
-- ✅ `createProjet` - Créer un nouveau projet avec validation d'authentification
-- ✅ `updateProjet` - Mettre à jour un projet avec vérification de propriété
-- ✅ `deleteProjet` - Supprimer un projet avec vérification de propriété
+- [OK] `createProjet` - Créer un nouveau projet avec validation d'authentification
+- [OK] `updateProjet` - Mettre à jour un projet avec vérification de propriété
+- [OK] `deleteProjet` - Supprimer un projet avec vérification de propriété
 
 ### 3. Documentation et Tests
 
 **Fichiers créés:**
-- ✅ `tests/projets.rest` - Tests REST Client pour toutes les opérations CRUD
-- ✅ `docs/CRUD_PROJETS.md` - Documentation complète du CRUD
+- [OK] `tests/projets.rest` - Tests REST Client pour toutes les opérations CRUD
+- [OK] `docs/CRUD_PROJETS.md` - Documentation complète du CRUD
 
-## 🔒 Sécurité implémentée
+##  Sécurité implémentée
 
-- ✅ Authentification obligatoire pour toutes les opérations
-- ✅ Isolation des données par utilisateur
-- ✅ Vérification de propriété pour update/delete
-- ✅ Gestion des erreurs appropriée
+- [OK] Authentification obligatoire pour toutes les opérations
+- [OK] Isolation des données par utilisateur
+- [OK] Vérification de propriété pour update/delete
+- [OK] Gestion des erreurs appropriée
 
-## 🚀 Comment tester
+##  Comment tester
 
 ### 1. Démarrer le serveur
 ```bash
@@ -120,14 +120,14 @@ mutation {
 }
 ```
 
-## 📝 Notes importantes
+##  Notes importantes
 
 1. **Authentification:** Toutes les requêtes nécessitent un header `Authorization: Bearer <token>`
 2. **IDs de compétences:** Pour associer des compétences à un projet, utilisez leurs IDs MongoDB
 3. **Validation:** Le champ `titre` est obligatoire lors de la création
 4. **Permissions:** Un utilisateur ne peut modifier/supprimer que ses propres projets
 
-## 🔧 Prochaines étapes possibles
+##  Prochaines étapes possibles
 
 - [ ] Ajouter la validation avec Joi pour les inputs
 - [ ] Implémenter la pagination pour `getProjets`

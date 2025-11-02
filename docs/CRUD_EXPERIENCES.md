@@ -196,7 +196,7 @@ mutation DeleteExperience($id: ID!) {
 
 ## Authentification
 
-⚠️ **Important:** Toutes les opérations nécessitent une authentification via JWT.
+[ATTENTION] **Important:** Toutes les opérations nécessitent une authentification via JWT.
 
 Incluez le token dans les headers de vos requêtes:
 ```
@@ -366,10 +366,10 @@ Pour une expérience actuellement en cours, **omettez** le champ `dateFin`:
 
 ### Description
 Rédigez des descriptions claires et concises:
-- ✅ Utilisez des verbes d'action
-- ✅ Mentionnez les technologies utilisées
-- ✅ Indiquez les réalisations principales
-- ❌ Évitez les descriptions trop longues
+- [OK] Utilisez des verbes d'action
+- [OK] Mentionnez les technologies utilisées
+- [OK] Indiquez les réalisations principales
+- [ERREUR] Évitez les descriptions trop longues
 
 **Exemple de bonne description:**
 ```

@@ -165,7 +165,7 @@ mutation DeleteProjet($id: ID!) {
 
 ## Authentification
 
-⚠️ **Important:** Toutes les opérations nécessitent une authentification via JWT.
+[ATTENTION] **Important:** Toutes les opérations nécessitent une authentification via JWT.
 
 Incluez le token dans les headers de vos requêtes:
 ```

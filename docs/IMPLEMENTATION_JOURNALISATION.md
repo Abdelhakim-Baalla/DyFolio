@@ -1,6 +1,6 @@
 # Implémentation de la Journalisation - DyFolio
 
-## ✅ Ce qui a été implémenté
+## [OK] Ce qui a été implémenté
 
 ### 1. Configuration Winston (`src/config/logger.ts`)
 - **Niveaux de log** : error, warn, info, debug
@@ -28,28 +28,28 @@
   - Tentatives de connexion échouées
   - Erreurs serveur
 
-## 📊 Types de logs générés
+##  Types de logs générés
 
 ### INFO
-- ✅ Apollo Server démarré
-- ✅ Serveur en marche sur http://localhost:PORT
-- ✅ Nouvel utilisateur inscrit
-- ✅ Utilisateur connecté
-- 📝 Toutes les requêtes HTTP (via Morgan)
+- [OK] Apollo Server démarré
+- [OK] Serveur en marche sur http://localhost:PORT
+- [OK] Nouvel utilisateur inscrit
+- [OK] Utilisateur connecté
+-  Toutes les requêtes HTTP (via Morgan)
 
 ### WARN
-- ⚠️ Tentative d'inscription avec données manquantes
-- ⚠️ Tentative d'inscription avec email existant
-- ⚠️ Tentative de connexion avec email inexistant
-- ⚠️ Tentative de connexion avec mot de passe invalide
+- [ATTENTION] Tentative d'inscription avec données manquantes
+- [ATTENTION] Tentative d'inscription avec email existant
+- [ATTENTION] Tentative de connexion avec email inexistant
+- [ATTENTION] Tentative de connexion avec mot de passe invalide
 
 ### ERROR
-- ❌ JWT secret non configuré
-- ❌ Erreur lors de l'inscription
-- ❌ Erreur lors de la connexion
-- ❌ Erreur au démarrage du serveur
+- [ERREUR] JWT secret non configuré
+- [ERREUR] Erreur lors de l'inscription
+- [ERREUR] Erreur lors de la connexion
+- [ERREUR] Erreur au démarrage du serveur
 
-## 📁 Fichiers créés/modifiés
+##  Fichiers créés/modifiés
 
 ### Nouveaux fichiers
 - `src/config/logger.ts` - Configuration Winston
@@ -62,7 +62,7 @@
 - `src/index.ts` - Ajout logger et Morgan
 - `src/controllers/auth.ts` - Remplacement console par logger
 
-## 🚀 Utilisation
+##  Utilisation
 
 ### Démarrer le serveur
 ```bash
@@ -84,7 +84,7 @@ Utiliser le fichier `tests/logging.rest` pour :
 - `logs/app.log` : Tous les logs
 - `logs/error.log` : Uniquement les erreurs
 
-## 🔧 Configuration
+##  Configuration
 
 Variable d'environnement `.env` :
 ```
@@ -93,7 +93,7 @@ LOG_LEVEL=info
 
 Valeurs : `error`, `warn`, `info`, `debug`
 
-## ✅ Avantages
+## [OK] Avantages
 
 1. **Centralisation** : Tous les logs au même endroit
 2. **Traçabilité** : Fichiers persistants avec rotation
@@ -102,7 +102,7 @@ Valeurs : `error`, `warn`, `info`, `debug`
 5. **Production ready** : Configuration adaptée pour la prod
 6. **Debugging** : Stack traces complètes pour les erreurs
 
-## 🎯 Prochaines étapes possibles
+##  Prochaines étapes possibles
 
 - Ajouter des logs dans les resolvers GraphQL
 - Implémenter des logs pour les opérations CRUD

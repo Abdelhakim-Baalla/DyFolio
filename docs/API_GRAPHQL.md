@@ -1,10 +1,10 @@
 # API GraphQL DyFolio - Documentation des CRUDs
 
-## 📋 Vue d'ensemble
+##  Vue d'ensemble
 
 Cette API GraphQL fournit des opérations CRUD complètes pour gérer un portfolio professionnel.
 
-## 🔐 Authentification
+##  Authentification
 
 Toutes les opérations (sauf `login` et `register`) nécessitent une authentification JWT.
 
@@ -13,9 +13,9 @@ Toutes les opérations (sauf `login` et `register`) nécessitent une authentific
 Authorization: Bearer VOTRE_TOKEN_JWT
 ```
 
-## 📚 Modules disponibles
+##  Modules disponibles
 
-### 1. 🔑 Authentification & Profil
+### 1.  Authentification & Profil
 
 #### Mutations disponibles:
 - `register` - Créer un nouveau compte utilisateur
@@ -26,11 +26,11 @@ Authorization: Bearer VOTRE_TOKEN_JWT
 - `getProfil` - Récupérer le profil de l'utilisateur connecté
 - `getPortfolio` - Récupérer le portfolio complet (profil + projets + compétences + expériences)
 
-📖 **Documentation:** Voir le code source pour plus de détails
+ **Documentation:** Voir le code source pour plus de détails
 
 ---
 
-### 2. 🚀 CRUD Projets
+### 2.  CRUD Projets
 
 Gérer les projets du portfolio.
 
@@ -43,8 +43,8 @@ Gérer les projets du portfolio.
 - `updateProjet(id, input)` - Mettre à jour un projet
 - `deleteProjet(id)` - Supprimer un projet
 
-📖 **Documentation complète:** [`docs/CRUD_PROJETS.md`](./CRUD_PROJETS.md)  
-🧪 **Tests:** [`tests/projets.rest`](../tests/projets.rest)
+ **Documentation complète:** [`docs/CRUD_PROJETS.md`](./CRUD_PROJETS.md)  
+ **Tests:** [`tests/projets.rest`](../tests/projets.rest)
 
 **Exemple rapide:**
 ```graphql
@@ -64,7 +64,7 @@ mutation {
 
 ---
 
-### 3. 💡 CRUD Compétences
+### 3.  CRUD Compétences
 
 Gérer les compétences techniques du portfolio.
 
@@ -77,8 +77,8 @@ Gérer les compétences techniques du portfolio.
 - `updateCompetence(id, input)` - Mettre à jour une compétence
 - `deleteCompetence(id)` - Supprimer une compétence
 
-📖 **Documentation complète:** [`docs/CRUD_COMPETENCES.md`](./CRUD_COMPETENCES.md)  
-🧪 **Tests:** [`tests/competences.rest`](../tests/competences.rest)
+ **Documentation complète:** [`docs/CRUD_COMPETENCES.md`](./CRUD_COMPETENCES.md)  
+ **Tests:** [`tests/competences.rest`](../tests/competences.rest)
 
 **Exemple rapide:**
 ```graphql
@@ -98,7 +98,7 @@ mutation {
 
 ---
 
-### 4. 💼 CRUD Expériences
+### 4.  CRUD Expériences
 
 Gérer les expériences professionnelles du portfolio.
 
@@ -111,8 +111,8 @@ Gérer les expériences professionnelles du portfolio.
 - `updateExperience(id, input)` - Mettre à jour une expérience
 - `deleteExperience(id)` - Supprimer une expérience
 
-📖 **Documentation complète:** [`docs/CRUD_EXPERIENCES.md`](./CRUD_EXPERIENCES.md)  
-🧪 **Tests:** [`tests/experiences.rest`](../tests/experiences.rest)
+ **Documentation complète:** [`docs/CRUD_EXPERIENCES.md`](./CRUD_EXPERIENCES.md)  
+ **Tests:** [`tests/experiences.rest`](../tests/experiences.rest)
 
 **Exemple rapide:**
 ```graphql
@@ -134,7 +134,7 @@ mutation {
 
 ---
 
-## 🎯 Guide de démarrage rapide
+##  Guide de démarrage rapide
 
 ### Étape 1: Installation et démarrage
 
@@ -184,7 +184,7 @@ Authorization: Bearer VOTRE_TOKEN_ICI
 
 ---
 
-## 🗂️ Structure des données
+##  Structure des données
 
 ```
 Utilisateur
@@ -196,7 +196,7 @@ Utilisateur
   └── Experiences[]
 ```
 
-## 📊 Schéma GraphQL
+##  Schéma GraphQL
 
 Le schéma complet est disponible dans [`src/schema/index.ts`](../src/schema/index.ts)
 
@@ -210,7 +210,7 @@ Le schéma complet est disponible dans [`src/schema/index.ts`](../src/schema/ind
 
 ---
 
-## 🧪 Tests
+##  Tests
 
 Tous les tests sont disponibles dans le dossier `tests/` au format REST Client.
 
@@ -228,7 +228,7 @@ Pour utiliser les tests:
 
 ---
 
-## 🔧 Technologies utilisées
+##  Technologies utilisées
 
 - **Node.js** + **TypeScript**
 - **GraphQL** avec `graphql-tag`
@@ -238,7 +238,7 @@ Pour utiliser les tests:
 
 ---
 
-## 📁 Architecture du projet
+##  Architecture du projet
 
 ```
 src/
@@ -274,12 +274,12 @@ tests/
 
 ---
 
-## 🚀 Prochaines fonctionnalités
+##  Prochaines fonctionnalités
 
 - [ ] CRUD Catégories
-- [x] ~~CRUD Projets~~ ✅ Complété
-- [x] ~~CRUD Compétences~~ ✅ Complété
-- [x] ~~CRUD Expériences~~ ✅ Complété
+- [x] ~~CRUD Projets~~ [OK] Complété
+- [x] ~~CRUD Compétences~~ [OK] Complété
+- [x] ~~CRUD Expériences~~ [OK] Complété
 - [ ] Upload d'images
 - [ ] Pagination des résultats
 - [ ] Filtres et recherche
@@ -289,7 +289,7 @@ tests/
 
 ---
 
-## 📝 Conventions et bonnes pratiques
+##  Conventions et bonnes pratiques
 
 ### Nommage
 - **Types GraphQL:** PascalCase (ex: `Projet`, `Competence`)
@@ -327,7 +327,7 @@ Pour toute question ou suggestion:
 
 ---
 
-## 📄 Licence
+##  Licence
 
 [À définir]
 
