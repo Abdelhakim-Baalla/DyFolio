@@ -130,9 +130,10 @@ export const resolvers = {
         }
 
         return competences.map((c: any) => ({
+          id: c._id.toString(),
           nom: c.nom || '',
           niveau: typeof c.niveau === 'number' ? c.niveau : 0,
-          categorie: c.categorie && c.categorie.nom ? { nom: c.categorie.nom } : null,
+          categorie: c.categorie && c.categorie.nom ? { id: c.categorie._id.toString(), nom: c.categorie.nom } : null,
         }));
       } catch (err: any) {
         console.error('Erreur getCompetences:', err?.message || err);
@@ -140,6 +141,38 @@ export const resolvers = {
           throw err;
         }
         throw new Error('Erreur interne lors de la récupération des compétences');
+      }
+    },
+    getCompetence: async (_parent: any, args: any, context: any) => {
+      try {
+        const Competence = Models.Competence;
+        const { id } = args;
+
+        const payload = (context && (context.user || context.utilisateur)) || null;
+        const utilisateurId = payload && (payload.id || payload._id || payload.userId || payload.utilisateurId);
+
+        if (!utilisateurId) {
+          throw new Error('Utilisateur non authentifié');
+        }
+
+        const competence = await Competence.findOne({ _id: id, utilisateur: utilisateurId }).populate('categorie', 'nom').lean();
+
+        if (!competence) {
+          throw new Error('Compétence non trouvée');
+        }
+
+        return {
+          id: competence._id.toString(),
+          nom: competence.nom || '',
+          niveau: typeof competence.niveau === 'number' ? competence.niveau : 0,
+          categorie: competence.categorie && competence.categorie.nom ? { id: competence.categorie._id.toString(), nom: competence.categorie.nom } : null,
+        };
+      } catch (err: any) {
+        console.error('Erreur getCompetence:', err?.message || err);
+        if (err instanceof Error && (err.message === 'Utilisateur non authentifié' || err.message === 'Compétence non trouvée')) {
+          throw err;
+        }
+        throw new Error('Erreur interne lors de la récupération de la compétence');
       }
     },
     getExperiences: async (_parent: any, _args: any, context: any) => {
@@ -184,18 +217,15 @@ export const resolvers = {
         const payload = (context && (context.user || context.utilisateur)) || null;
         const utilisateurId = payload && (payload.id || payload._id || payload.userId || payload.utilisateurId);
 
-        // Try to load the profile of the authenticated user first
         let profil = null;
         if (utilisateurId) {
           profil = await Profil.findOne({ utilisateur: utilisateurId }).lean();
         }
 
-        // If no user profile, try to return a public/default profile (first found)
         if (!profil) {
           profil = await Profil.findOne({}).lean();
         }
 
-        // If still no profile, return an empty but valid Profil object to respect GraphQL non-nullable contract
         const defaultProfil = {
           nom: '',
           prenom: '',
@@ -237,9 +267,10 @@ export const resolvers = {
         }));
 
         const mappedCompetences = (competences || []).map((c: any) => ({
+          id: c._id.toString(),
           nom: c.nom || '',
           niveau: typeof c.niveau === 'number' ? c.niveau : 0,
-          categorie: c.categorie && c.categorie.nom ? { nom: c.categorie.nom } : null,
+          categorie: c.categorie && c.categorie.nom ? { id: c.categorie._id.toString(), nom: c.categorie.nom } : null,
         }));
 
         const mappedExperiences = (experiences || []).map((e: any) => ({
@@ -480,6 +511,105 @@ export const resolvers = {
       } catch (err: any) {
         console.error('Erreur deleteProjet resolver:', err?.message || err);
         throw new Error(err.message || 'Erreur lors de la suppression du projet');
+      }
+    },
+
+    createCompetence: async (_parent: any, args: any, context: any) => {
+      try {
+        const Competence = Models.Competence;
+
+        const payload = (context && (context.user || context.utilisateur)) || null;
+        const utilisateurId = payload && (payload.id || payload._id || payload.userId || payload.utilisateurId);
+
+        if (!utilisateurId) {
+          throw new Error('Utilisateur non authentifié');
+        }
+
+        const { nom, niveau, categorie } = args.input;
+
+        const newCompetence = await Competence.create({
+          nom,
+          niveau,
+          categorie,
+          utilisateur: utilisateurId,
+        });
+
+        const populatedCompetence = await Competence.findById(newCompetence._id).populate('categorie', 'nom').lean();
+
+        return {
+          id: populatedCompetence._id.toString(),
+          nom: populatedCompetence.nom || '',
+          niveau: typeof populatedCompetence.niveau === 'number' ? populatedCompetence.niveau : 0,
+          categorie: populatedCompetence.categorie && populatedCompetence.categorie.nom ? { id: populatedCompetence.categorie._id.toString(), nom: populatedCompetence.categorie.nom } : null,
+        };
+      } catch (err: any) {
+        console.error('Erreur createCompetence resolver:', err?.message || err);
+        throw new Error(err.message || 'Erreur lors de la création de la compétence');
+      }
+    },
+
+    updateCompetence: async (_parent: any, args: any, context: any) => {
+      try {
+        const Competence = Models.Competence;
+        const { id, input } = args;
+
+        const payload = (context && (context.user || context.utilisateur)) || null;
+        const utilisateurId = payload && (payload.id || payload._id || payload.userId || payload.utilisateurId);
+
+        if (!utilisateurId) {
+          throw new Error('Utilisateur non authentifié');
+        }
+
+        const existingCompetence = await Competence.findOne({ _id: id, utilisateur: utilisateurId });
+        if (!existingCompetence) {
+          throw new Error('Compétence non trouvée ou vous n\'avez pas les permissions');
+        }
+
+        const updatedCompetence = await Competence.findByIdAndUpdate(
+          id,
+          { ...input },
+          { new: true }
+        ).populate('categorie', 'nom').lean();
+
+        if (!updatedCompetence) {
+          throw new Error('Erreur lors de la mise à jour de la compétence');
+        }
+
+        return {
+          id: updatedCompetence._id.toString(),
+          nom: updatedCompetence.nom || '',
+          niveau: typeof updatedCompetence.niveau === 'number' ? updatedCompetence.niveau : 0,
+          categorie: updatedCompetence.categorie && updatedCompetence.categorie.nom ? { id: updatedCompetence.categorie._id.toString(), nom: updatedCompetence.categorie.nom } : null,
+        };
+      } catch (err: any) {
+        console.error('Erreur updateCompetence resolver:', err?.message || err);
+        throw new Error(err.message || 'Erreur lors de la mise à jour de la compétence');
+      }
+    },
+
+    deleteCompetence: async (_parent: any, args: any, context: any) => {
+      try {
+        const Competence = Models.Competence;
+        const { id } = args;
+
+        const payload = (context && (context.user || context.utilisateur)) || null;
+        const utilisateurId = payload && (payload.id || payload._id || payload.userId || payload.utilisateurId);
+
+        if (!utilisateurId) {
+          throw new Error('Utilisateur non authentifié');
+        }
+
+        const existingCompetence = await Competence.findOne({ _id: id, utilisateur: utilisateurId });
+        if (!existingCompetence) {
+          throw new Error('Compétence non trouvée ou vous n\'avez pas les permissions');
+        }
+
+        await Competence.findByIdAndDelete(id);
+
+        return true;
+      } catch (err: any) {
+        console.error('Erreur deleteCompetence resolver:', err?.message || err);
+        throw new Error(err.message || 'Erreur lors de la suppression de la compétence');
       }
     },
   },
