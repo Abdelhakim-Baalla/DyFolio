@@ -1,6 +1,6 @@
 # Comparaison CRUD Projets vs Compétences
 
-## 📊 Tableau comparatif
+##  Tableau comparatif
 
 | Caractéristique | Projets | Compétences |
 |----------------|---------|-------------|
@@ -10,7 +10,7 @@
 | **Niveau d'imbrication** | Peut contenir plusieurs compétences | Contient une catégorie |
 | **Type de données spécial** | URLs (liens) | Nombre entier (niveau) |
 
-## 🔄 Opérations CRUD
+##  Opérations CRUD
 
 ### CREATE (Créer)
 
@@ -46,10 +46,10 @@ mutation {
 ```
 
 **Différences clés:**
-- ✅ Projet: Plus de champs mais la plupart optionnels
-- ✅ Compétence: Moins de champs mais tous requis (sauf nom)
-- ✅ Projet: Peut référencer plusieurs compétences
-- ✅ Compétence: Doit référencer UNE catégorie
+- [OK] Projet: Plus de champs mais la plupart optionnels
+- [OK] Compétence: Moins de champs mais tous requis (sauf nom)
+- [OK] Projet: Peut référencer plusieurs compétences
+- [OK] Compétence: Doit référencer UNE catégorie
 
 ---
 
@@ -109,9 +109,9 @@ query {
 ```
 
 **Similarités:**
-- ✅ Même structure de query avec ID
-- ✅ Populate automatique des relations
-- ✅ Vérification d'appartenance à l'utilisateur
+- [OK] Même structure de query avec ID
+- [OK] Populate automatique des relations
+- [OK] Vérification d'appartenance à l'utilisateur
 
 ---
 
@@ -150,9 +150,9 @@ mutation {
 ```
 
 **Similarités:**
-- ✅ Tous les champs de l'input sont optionnels
-- ✅ Seuls les champs fournis sont mis à jour
-- ✅ Vérification de propriété avant mise à jour
+- [OK] Tous les champs de l'input sont optionnels
+- [OK] Seuls les champs fournis sont mis à jour
+- [OK] Vérification de propriété avant mise à jour
 
 ---
 
@@ -173,13 +173,13 @@ mutation {
 ```
 
 **Similarités:**
-- ✅ Retourne Boolean (true si succès)
-- ✅ Vérification de propriété avant suppression
-- ✅ Même pattern de gestion d'erreurs
+- [OK] Retourne Boolean (true si succès)
+- [OK] Vérification de propriété avant suppression
+- [OK] Même pattern de gestion d'erreurs
 
 ---
 
-## 🔒 Sécurité
+##  Sécurité
 
 ### Projets
 ```typescript
@@ -211,7 +211,7 @@ if (!existingCompetence) {
 
 ---
 
-## 📦 Modèles Mongoose
+##  Modèles Mongoose
 
 ### Projet
 ```typescript
@@ -238,7 +238,7 @@ if (!existingCompetence) {
 
 ---
 
-## 🎯 Cas d'usage
+##  Cas d'usage
 
 ### Projets
 - Portfolio de développeur
@@ -254,7 +254,7 @@ if (!existingCompetence) {
 
 ---
 
-## 🔗 Relations entre entités
+##  Relations entre entités
 
 ```
 Projet ────N:N────▶ Competence
@@ -278,25 +278,25 @@ Utilisateur          Utilisateur
 
 ---
 
-## 💡 Bonnes pratiques
+##  Bonnes pratiques
 
 ### Pour les Projets
-1. ✅ Toujours renseigner le titre (obligatoire)
-2. ✅ Ajouter une description claire
-3. ✅ Lier aux compétences utilisées
-4. ✅ Fournir des liens de démo si disponibles
-5. ✅ Utiliser des URLs valides pour images et liens
+1. [OK] Toujours renseigner le titre (obligatoire)
+2. [OK] Ajouter une description claire
+3. [OK] Lier aux compétences utilisées
+4. [OK] Fournir des liens de démo si disponibles
+5. [OK] Utiliser des URLs valides pour images et liens
 
 ### Pour les Compétences
-1. ✅ Utiliser une échelle cohérente pour le niveau (0-100)
-2. ✅ Associer à une catégorie pertinente
-3. ✅ Nommer clairement (ex: "React" pas "react" ou "ReactJS")
-4. ✅ Mettre à jour régulièrement les niveaux
-5. ✅ Créer les catégories avant les compétences
+1. [OK] Utiliser une échelle cohérente pour le niveau (0-100)
+2. [OK] Associer à une catégorie pertinente
+3. [OK] Nommer clairement (ex: "React" pas "react" ou "ReactJS")
+4. [OK] Mettre à jour régulièrement les niveaux
+5. [OK] Créer les catégories avant les compétences
 
 ---
 
-## 🚀 Utilisation conjointe
+##  Utilisation conjointe
 
 ### Créer un projet avec ses compétences
 
@@ -365,7 +365,7 @@ query {
 
 ---
 
-## 📈 Statistiques possibles
+##  Statistiques possibles
 
 ### Pour les Projets
 - Nombre total de projets
@@ -381,7 +381,7 @@ query {
 
 ---
 
-## 🔧 Extensibilité future
+##  Extensibilité future
 
 ### Projets
 - [ ] Tags/mots-clés

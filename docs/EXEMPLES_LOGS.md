@@ -69,10 +69,10 @@ Error: Cannot read property 'email' of undefined
 ## Console colorée
 
 En développement, les logs sont affichés avec des couleurs :
-- 🟢 **INFO** : Vert
-- 🟡 **WARN** : Jaune
-- 🔴 **ERROR** : Rouge
-- 🔵 **DEBUG** : Bleu
+-  **INFO** : Vert
+-  **WARN** : Jaune
+-  **ERROR** : Rouge
+-  **DEBUG** : Bleu
 
 ## Fichiers de logs
 

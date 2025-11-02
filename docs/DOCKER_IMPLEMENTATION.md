@@ -1,15 +1,15 @@
-# 🐳 Docker Compose - DyFolio - Documentation Complète
+#  Docker Compose - DyFolio - Documentation Complète
 
-## ✅ Task DYF-37 : COMPLÉTÉE
+## [OK] Task DYF-37 : COMPLÉTÉE
 
-### 🎯 Objectif
+###  Objectif
 Conteneuriser l'application DyFolio avec Docker Compose (API + MongoDB).
 
 ---
 
-## 📦 Ce qui a été créé
+##  Ce qui a été créé
 
-### 1️⃣ Configuration Docker
+### 1. Configuration Docker
 
 #### `Dockerfile`
 - Image Node.js 18 Alpine (légère)
@@ -19,15 +19,15 @@ Conteneuriser l'application DyFolio avec Docker Compose (API + MongoDB).
 
 #### `docker-compose.yml`
 **Services :**
-- 🔷 **MongoDB** : Base de données (port 27017)
-- 🔶 **API** : Application Node.js (port 4000)
+-  **MongoDB** : Base de données (port 27017)
+-  **API** : Application Node.js (port 4000)
 
 **Fonctionnalités :**
-- ✅ Health checks automatiques
-- ✅ Restart automatique
-- ✅ Volumes persistants
-- ✅ Réseau isolé
-- ✅ Variables d'environnement
+- [OK] Health checks automatiques
+- [OK] Restart automatique
+- [OK] Volumes persistants
+- [OK] Réseau isolé
+- [OK] Variables d'environnement
 
 #### `.dockerignore`
 Optimise le build en excluant :
@@ -36,7 +36,7 @@ Optimise le build en excluant :
 - tests
 - .env
 
-### 2️⃣ Scripts de démarrage
+### 2. Scripts de démarrage
 
 #### `scripts/start-docker.sh` (Linux/Mac)
 Script bash automatique pour :
@@ -48,19 +48,19 @@ Script bash automatique pour :
 #### `scripts/start-docker.bat` (Windows)
 Version Windows du script.
 
-### 3️⃣ Documentation
+### 3. Documentation
 
 - **DOCKER_README.md** : Documentation complète
 - **QUICK_START_DOCKER.md** : Guide rapide
 - **tests/docker.rest** : Tests REST pour Docker
 
-### 4️⃣ Configuration
+### 4⃣ Configuration
 
 - **.env.docker** : Variables d'environnement pour Docker
 
 ---
 
-## 🚀 Utilisation
+##  Utilisation
 
 ### Démarrage simple
 
@@ -96,7 +96,7 @@ curl http://localhost:4000/graphql
 
 ---
 
-## 📊 Architecture Docker
+##  Architecture Docker
 
 ```
 ┌─────────────────────────────────────┐
@@ -115,7 +115,7 @@ curl http://localhost:4000/graphql
 
 ---
 
-## 🔧 Configuration détaillée
+##  Configuration détaillée
 
 ### Variables d'environnement (API)
 
@@ -144,7 +144,7 @@ curl http://localhost:4000/graphql
 
 ---
 
-## 🏥 Health Checks
+##  Health Checks
 
 ### MongoDB
 ```yaml
@@ -164,7 +164,7 @@ retries: 3
 
 ---
 
-## 📋 Commandes Docker Compose
+##  Commandes Docker Compose
 
 ### Gestion des services
 
@@ -229,7 +229,7 @@ docker-compose events
 
 ---
 
-## 🧪 Tests
+##  Tests
 
 ### 1. Test de santé de l'API
 ```bash
@@ -249,31 +249,31 @@ Utiliser le fichier `tests/docker.rest` :
 
 ---
 
-## 🎯 Avantages de cette configuration
+##  Avantages de cette configuration
 
-### ✅ Simplicité
+### [OK] Simplicité
 - Une seule commande pour démarrer
 - Configuration minimale
 - Scripts automatiques
 
-### ✅ Robustesse
+### [OK] Robustesse
 - Health checks
 - Restart automatique
 - Volumes persistants
 
-### ✅ Performance
+### [OK] Performance
 - Images Alpine (légères)
 - Build optimisé
 - Réseau isolé
 
-### ✅ Production Ready
+### [OK] Production Ready
 - Variables d'environnement
 - Logs persistants
 - Configuration flexible
 
 ---
 
-## 🔍 Résolution de problèmes
+##  Résolution de problèmes
 
 ### Port 4000 déjà utilisé
 
@@ -324,9 +324,9 @@ docker-compose up -d --build
 
 ---
 
-## 📈 Évolutions possibles
+##  Évolutions possibles
 
-### 🔹 Ajouter un reverse proxy (Nginx)
+###  Ajouter un reverse proxy (Nginx)
 ```yaml
 nginx:
   image: nginx:alpine
@@ -336,7 +336,7 @@ nginx:
     - api
 ```
 
-### 🔹 Ajouter Redis pour le cache
+###  Ajouter Redis pour le cache
 ```yaml
 redis:
   image: redis:alpine
@@ -344,7 +344,7 @@ redis:
     - "6379:6379"
 ```
 
-### 🔹 Monitoring avec Prometheus
+###  Monitoring avec Prometheus
 ```yaml
 prometheus:
   image: prom/prometheus
@@ -354,7 +354,7 @@ prometheus:
 
 ---
 
-## ✅ Checklist de déploiement
+## [OK] Checklist de déploiement
 
 - [x] Dockerfile créé
 - [x] docker-compose.yml configuré
@@ -367,17 +367,17 @@ prometheus:
 
 ---
 
-## 🎊 Résultat
+##  Résultat
 
-✅ **Application conteneurisée**
-✅ **Déploiement simplifié**
-✅ **MongoDB intégré**
-✅ **Production ready**
-✅ **Scripts automatiques**
+[OK] **Application conteneurisée**
+[OK] **Déploiement simplifié**
+[OK] **MongoDB intégré**
+[OK] **Production ready**
+[OK] **Scripts automatiques**
 
 ---
 
-## 📚 Ressources
+##  Ressources
 
 - [Docker Documentation](https://docs.docker.com/)
 - [Docker Compose Documentation](https://docs.docker.com/compose/)
@@ -386,4 +386,4 @@ prometheus:
 
 ---
 
-**Task DYF-37 : Docker Compose - COMPLÉTÉE** ✅ 🎉
+**Task DYF-37 : Docker Compose - COMPLÉTÉE** [OK] 
