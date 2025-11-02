@@ -4,9 +4,9 @@ describe('Experience Validator - Tests Unitaires', () => {
   
   test('Validation réussie avec des données valides', () => {
     const data = {
-      titre: 'Développeur Web',
+      poste: 'Développeur Web',
       entreprise: 'Tech Corp',
-      description: 'Développement d\'applications web',
+      description: 'Développement d\'applications web modernes',
       dateDebut: '2023-01-01',
       dateFin: '2024-01-01'
     };
@@ -15,23 +15,23 @@ describe('Experience Validator - Tests Unitaires', () => {
     expect(error).toBeUndefined();
   });
 
-  test('Échec si titre manquant', () => {
+  test('Échec si poste manquant', () => {
     const data = {
       entreprise: 'Tech Corp',
-      description: 'Développement d\'applications web',
+      description: 'Développement d\'applications web modernes',
       dateDebut: '2023-01-01'
     };
 
     const { error } = createExperienceSchema.validate(data);
     expect(error).toBeDefined();
-    expect(error?.message).toContain('titre');
+    expect(error?.message).toContain('poste');
   });
 
   test('Validation réussie sans dateFin (poste actuel)', () => {
     const data = {
-      titre: 'Développeur Web',
+      poste: 'Développeur Web',
       entreprise: 'Tech Corp',
-      description: 'Développement d\'applications web',
+      description: 'Développement d\'applications web modernes',
       dateDebut: '2023-01-01'
     };
 

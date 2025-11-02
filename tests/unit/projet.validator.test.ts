@@ -4,38 +4,34 @@ describe('Projet Validator - Tests Unitaires', () => {
   
   test('Validation réussie avec des données valides', () => {
     const data = {
-      nom: 'Mon Portfolio',
-      description: 'Un portfolio moderne',
-      technologies: ['React', 'Node.js'],
-      dateDebut: '2023-01-01',
-      dateFin: '2024-01-01'
+      titre: 'Mon Portfolio',
+      description: 'Un portfolio moderne et responsive',
+      technologies: ['React', 'Node.js']
     };
 
     const { error } = createProjetSchema.validate(data);
     expect(error).toBeUndefined();
   });
 
-  test('Échec si nom manquant', () => {
+  test('Échec si titre manquant', () => {
     const data = {
-      description: 'Un portfolio moderne',
-      technologies: ['React', 'Node.js'],
-      dateDebut: '2023-01-01'
+      description: 'Un portfolio moderne et responsive',
+      technologies: ['React', 'Node.js']
     };
 
     const { error } = createProjetSchema.validate(data);
     expect(error).toBeDefined();
-    expect(error?.message).toContain('nom');
+    expect(error?.message).toContain('titre');
   });
 
-  test('Validation réussie sans dateFin (projet en cours)', () => {
+  test('Échec si technologies manquantes', () => {
     const data = {
-      nom: 'Mon Portfolio',
-      description: 'Un portfolio moderne',
-      technologies: ['React', 'Node.js'],
-      dateDebut: '2023-01-01'
+      titre: 'Mon Portfolio',
+      description: 'Un portfolio moderne et responsive'
     };
 
     const { error } = createProjetSchema.validate(data);
-    expect(error).toBeUndefined();
+    expect(error).toBeDefined();
+    expect(error?.message).toContain('technologies');
   });
 });
