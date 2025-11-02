@@ -26,6 +26,7 @@ export const typeDefs = gql`
   }
 
   type Experience {
+    id: ID!
     poste: String!
     entreprise: String!
     description: String
@@ -59,6 +60,7 @@ export const typeDefs = gql`
     getCompetences: [Competence!]!
     getCompetence(id: ID!): Competence
     getExperiences: [Experience!]!
+    getExperience(id: ID!): Experience
   }
 
   type MiniUtilisateur {
@@ -121,6 +123,22 @@ export const typeDefs = gql`
     categorie: ID
   }
 
+  input CreateExperienceInput {
+    poste: String!
+    entreprise: String!
+    description: String
+    dateDebut: String!
+    dateFin: String
+  }
+
+  input UpdateExperienceInput {
+    poste: String
+    entreprise: String
+    description: String
+    dateDebut: String
+    dateFin: String
+  }
+
   type Mutation {
     login(username: String!, password: String!): AuthPayload!
     updateProfil(input: UpdateProfilInput!): Profil!
@@ -131,5 +149,8 @@ export const typeDefs = gql`
     createCompetence(input: CreateCompetenceInput!): Competence!
     updateCompetence(id: ID!, input: UpdateCompetenceInput!): Competence!
     deleteCompetence(id: ID!): Boolean!
+    createExperience(input: CreateExperienceInput!): Experience!
+    updateExperience(id: ID!, input: UpdateExperienceInput!): Experience!
+    deleteExperience(id: ID!): Boolean!
   }
 `;

@@ -193,6 +193,7 @@ export const resolvers = {
         }
 
         return experiences.map((e: any) => ({
+          id: e._id.toString(),
           poste: e.poste || '',
           entreprise: e.entreprise || '',
           description: e.description || '',
@@ -205,6 +206,40 @@ export const resolvers = {
           throw err;
         }
         throw new Error('Erreur interne lors de la récupération des expériences');
+      }
+    },
+    getExperience: async (_parent: any, args: any, context: any) => {
+      try {
+        const Experience = Models.Experience;
+        const { id } = args;
+
+        const payload = (context && (context.user || context.utilisateur)) || null;
+        const utilisateurId = payload && (payload.id || payload._id || payload.userId || payload.utilisateurId);
+
+        if (!utilisateurId) {
+          throw new Error('Utilisateur non authentifié');
+        }
+
+        const experience = await Experience.findOne({ _id: id, utilisateur: utilisateurId }).lean();
+
+        if (!experience) {
+          throw new Error('Expérience non trouvée');
+        }
+
+        return {
+          id: experience._id.toString(),
+          poste: experience.poste || '',
+          entreprise: experience.entreprise || '',
+          description: experience.description || '',
+          dateDebut: experience.dateDebut ? new Date(experience.dateDebut).toISOString() : null,
+          dateFin: experience.dateFin ? new Date(experience.dateFin).toISOString() : null,
+        };
+      } catch (err: any) {
+        console.error('Erreur getExperience:', err?.message || err);
+        if (err instanceof Error && (err.message === 'Utilisateur non authentifié' || err.message === 'Expérience non trouvée')) {
+          throw err;
+        }
+        throw new Error('Erreur interne lors de la récupération de l\'expérience');
       }
     },
     getPortfolio: async (_parent: any, _args: any, context: any) => {
@@ -274,6 +309,7 @@ export const resolvers = {
         }));
 
         const mappedExperiences = (experiences || []).map((e: any) => ({
+          id: e._id.toString(),
           entreprise: e.entreprise || '',
           poste: e.poste || '',
           description: e.description || '',
@@ -610,6 +646,116 @@ export const resolvers = {
       } catch (err: any) {
         console.error('Erreur deleteCompetence resolver:', err?.message || err);
         throw new Error(err.message || 'Erreur lors de la suppression de la compétence');
+      }
+    },
+
+    createExperience: async (_parent: any, args: any, context: any) => {
+      try {
+        const Experience = Models.Experience;
+
+        const payload = (context && (context.user || context.utilisateur)) || null;
+        const utilisateurId = payload && (payload.id || payload._id || payload.userId || payload.utilisateurId);
+
+        if (!utilisateurId) {
+          throw new Error('Utilisateur non authentifié');
+        }
+
+        const { poste, entreprise, description, dateDebut, dateFin } = args.input;
+
+        const newExperience = await Experience.create({
+          poste,
+          entreprise,
+          description: description || '',
+          dateDebut: dateDebut ? new Date(dateDebut) : new Date(),
+          dateFin: dateFin ? new Date(dateFin) : null,
+          utilisateur: utilisateurId,
+        });
+
+        return {
+          id: newExperience._id.toString(),
+          poste: newExperience.poste || '',
+          entreprise: newExperience.entreprise || '',
+          description: newExperience.description || '',
+          dateDebut: newExperience.dateDebut ? new Date(newExperience.dateDebut).toISOString() : null,
+          dateFin: newExperience.dateFin ? new Date(newExperience.dateFin).toISOString() : null,
+        };
+      } catch (err: any) {
+        console.error('Erreur createExperience resolver:', err?.message || err);
+        throw new Error(err.message || 'Erreur lors de la création de l\'expérience');
+      }
+    },
+
+    updateExperience: async (_parent: any, args: any, context: any) => {
+      try {
+        const Experience = Models.Experience;
+        const { id, input } = args;
+
+        const payload = (context && (context.user || context.utilisateur)) || null;
+        const utilisateurId = payload && (payload.id || payload._id || payload.userId || payload.utilisateurId);
+
+        if (!utilisateurId) {
+          throw new Error('Utilisateur non authentifié');
+        }
+
+        const existingExperience = await Experience.findOne({ _id: id, utilisateur: utilisateurId });
+        if (!existingExperience) {
+          throw new Error('Expérience non trouvée ou vous n\'avez pas les permissions');
+        }
+
+        const updateData: any = {};
+        if (input.poste !== undefined) updateData.poste = input.poste;
+        if (input.entreprise !== undefined) updateData.entreprise = input.entreprise;
+        if (input.description !== undefined) updateData.description = input.description;
+        if (input.dateDebut !== undefined) updateData.dateDebut = new Date(input.dateDebut);
+        if (input.dateFin !== undefined) updateData.dateFin = input.dateFin ? new Date(input.dateFin) : null;
+
+        const updatedExperience = await Experience.findByIdAndUpdate(
+          id,
+          updateData,
+          { new: true }
+        ).lean();
+
+        if (!updatedExperience) {
+          throw new Error('Erreur lors de la mise à jour de l\'expérience');
+        }
+
+        return {
+          id: updatedExperience._id.toString(),
+          poste: updatedExperience.poste || '',
+          entreprise: updatedExperience.entreprise || '',
+          description: updatedExperience.description || '',
+          dateDebut: updatedExperience.dateDebut ? new Date(updatedExperience.dateDebut).toISOString() : null,
+          dateFin: updatedExperience.dateFin ? new Date(updatedExperience.dateFin).toISOString() : null,
+        };
+      } catch (err: any) {
+        console.error('Erreur updateExperience resolver:', err?.message || err);
+        throw new Error(err.message || 'Erreur lors de la mise à jour de l\'expérience');
+      }
+    },
+
+    deleteExperience: async (_parent: any, args: any, context: any) => {
+      try {
+        const Experience = Models.Experience;
+        const { id } = args;
+
+        const payload = (context && (context.user || context.utilisateur)) || null;
+        const utilisateurId = payload && (payload.id || payload._id || payload.userId || payload.utilisateurId);
+
+        if (!utilisateurId) {
+          throw new Error('Utilisateur non authentifié');
+        }
+
+        const existingExperience = await Experience.findOne({ _id: id, utilisateur: utilisateurId });
+        if (!existingExperience) {
+          throw new Error('Expérience non trouvée ou vous n\'avez pas les permissions');
+        }
+
+        await Experience.findByIdAndDelete(id);
+
+        return true;
+      } catch (err: any) {
+        console.error('Erreur deleteExperience resolver:', err?.message || err);
+        throw new Error(err.message || 'Erreur lors de la suppression de l\'expérience');
       }
     },
   },
