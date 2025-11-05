@@ -1,0 +1,21 @@
+{
+  "name": "DyFolio",
+  "short_name": "DyFolio",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0ea5a4",
+  "description": "Portfolio présentant projets, compétences et expériences.",
+  "icons": [
+    {
+      "src": "/DyFolio-icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/DyFolio-icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

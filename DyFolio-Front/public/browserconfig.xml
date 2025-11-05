@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<browserconfig>
+  <msapplication>
+    <tile>
+      <!-- Windows tile image; ideally 150x150 PNG -->
+      <square150x150logo src="/DyFolio-icon.png" />
+      <TileColor>#0ea5a4</TileColor>
+    </tile>
+  </msapplication>
+</browserconfig>

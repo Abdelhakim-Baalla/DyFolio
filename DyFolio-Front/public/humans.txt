@@ -1,0 +1,8 @@
+/* TEAM */
+Last-Updated: 2025-11-05
+Developer: Abdelhakim Baalla
+Contact: abdelhakimbaalla50@gmail.com
+
+/* SITE */
+Standards: HTML5, CSS3, ES2020
+Components: React, Vite
