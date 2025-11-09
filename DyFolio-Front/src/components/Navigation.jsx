@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { NavLink, Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faUserTie, faSun, faMoon } from '@fortawesome/free-solid-svg-icons'
 
 export default function Navigation() {
   const [dark, setDark] = useState(true);
@@ -59,7 +61,7 @@ export default function Navigation() {
               className={`px-3 py-1 text-sm flex items-center gap-2 ${theme.admin}`}
               aria-label="Admin"
             >
-              <i className="fa-solid fa-user-tie" aria-hidden="true"></i>
+              <FontAwesomeIcon icon={faUserTie} aria-hidden={true} />
               <span>Admin</span>
             </Link>
 
@@ -70,9 +72,9 @@ export default function Navigation() {
               title="Basculer thème"
             >
               {dark ? (
-                <i className="fa-solid fa-sun" aria-hidden="true"></i>
+                <FontAwesomeIcon icon={faSun} aria-hidden={true} />
               ) : (
-                <i className="fa-solid fa-moon" aria-hidden="true"></i>
+                <FontAwesomeIcon icon={faMoon} aria-hidden={true} />
               )}
             </button>
           </div>
