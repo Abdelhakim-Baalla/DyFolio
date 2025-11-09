@@ -12,31 +12,7 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <Home />,
-      },
-      {
-        path: 'about',
-        element: <About />,
-      },
-      {
-        path: 'projects',
-        element: <Projects />,
-      },
-      {
-        path: 'projects/:id',
-        element: <ProjectDetail />,
-      },
-      {
-        path: 'contact',
-        element: <Contact />,
-      },
+      }
     ],
-  },
-  {
-    path: '/login',
-    element: <Login />,
-  },
-  {
-    path: '/register',
-    element: <Register />,
-  },
+  }
 ]);
