@@ -5,7 +5,10 @@ import { faHeart } from '@fortawesome/free-solid-svg-icons'
 
 export default function Footer() {
   return (
-    <footer className="bg-white dark:bg-slate-900 text-gray-800 dark:text-gray-300 py-24 h-1/2 flex flex-col md:flex-row items-center md:items-start gap-12 md:gap-20 justify-center ">
+    <footer
+      className="bg-white dark:bg-slate-900 text-gray-800 dark:text-gray-300 py-24 h-1/2 flex flex-col md:flex-row items-center md:items-start gap-12 md:gap-20 justify-center"
+      style={{ paddingTop: '45px', paddingBottom: '50px' }}
+    >
       <div className="w-[90%] mx-auto px-8 sm:px-12 lg:px-20 flex flex-col gap-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-10 items-start text-center md:text-left">
           <div>
@@ -26,7 +29,7 @@ export default function Footer() {
             </nav>
           </div>
 
-          <div className="flex flex-col items-center md:items-end md:text-right">
+          <div className="flex flex-col items-center md:items-start md:text-left">
             <h4 className="text-lg font-semibold mb-4 text-gray-700 dark:text-gray-200">Suivez-moi</h4>
             <div className="flex items-center gap-6 text-gray-600 dark:text-gray-300">
               <a href="#" aria-label="GitHub" className="hover:text-white dark:hover:text-white transition-colors duration-300">
