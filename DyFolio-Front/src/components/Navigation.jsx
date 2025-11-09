@@ -2,13 +2,10 @@ import { useState, useEffect } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUserTie, faSun, faMoon } from '@fortawesome/free-solid-svg-icons'
+import { useTheme } from '../contexts/ThemeContext'
 
 export default function Navigation() {
-  const [dark, setDark] = useState(true);
-
-  useEffect(() => {
-    document.documentElement.classList.toggle('dark', dark);
-  }, [dark]);
+  const { dark, toggle } = useTheme();
 
   const theme = {
     centerActive: dark ? 'text-sky-400 border-sky-400' : 'text-sky-600 border-sky-600',
@@ -66,7 +63,7 @@ export default function Navigation() {
             </Link>
 
             <button
-              onClick={() => setDark((d) => !d)}
+              onClick={toggle}
               className={`w-10 h-10 rounded-full flex items-center justify-center ${theme.btn}`}
               aria-label="Toggle theme"
               title="Basculer thème"
