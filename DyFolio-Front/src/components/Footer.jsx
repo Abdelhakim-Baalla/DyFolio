@@ -2,11 +2,16 @@ import { Outlet } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGithub, faLinkedin, faTwitter } from '@fortawesome/free-brands-svg-icons'
 import { faHeart } from '@fortawesome/free-solid-svg-icons'
+import { useTheme } from '../contexts/ThemeContext'
 
 export default function Footer() {
+  
+
+  const { dark } = useTheme();
+
   return (
     <footer
-      className="bg-white dark:bg-slate-900 text-gray-800 dark:text-gray-300 py-24 h-1/2 flex flex-col md:flex-row items-center md:items-start gap-12 md:gap-20 justify-center"
+      className={`${dark ? 'bg-slate-900 text-gray-300' : 'bg-white text-gray-800'} py-24 h-1/2 flex flex-col md:flex-row items-center md:items-start gap-12 md:gap-20 justify-center`}
       style={{ paddingTop: '45px', paddingBottom: '50px' }}
     >
       <div className="w-[90%] mx-auto px-8 sm:px-12 lg:px-20 flex flex-col gap-8">
@@ -47,6 +52,7 @@ export default function Footer() {
 
         <div className="mt-14 border-t pt-8 border-gray-200 dark:border-gray-700 flex flex-col md:flex-row items-center justify-between gap-6">
           <p className="text-sm text-gray-600 dark:text-gray-400">&copy; {new Date().getFullYear()} DyFolio. Tous droits réservés.</p>
+
         </div>
       </div>
     </footer>
