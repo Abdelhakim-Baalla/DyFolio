@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import PortfolioGreeting from '../components/PortfolioGreeting';
 
 const stats = [
   { value: '50+', label: 'Projets livrés' },
@@ -42,6 +43,10 @@ export default function Home() {
         <p className="mx-auto mb-10 w-full text-lg text-slate-300 sm:text-xl" style={{marginTop: '32px', marginBottom: '25px'}}>
           Designer UI/UX et développeur créatif passionné par la création d\'expériences numériques élégantes, performantes et mémorables.
         </p>
+
+        <div className="mt-4 flex justify-center">
+          <PortfolioGreeting />
+        </div>
 
         <div className="flex flex-wrap items-center justify-center gap-4">
           <Link
