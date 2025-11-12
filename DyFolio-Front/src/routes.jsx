@@ -6,6 +6,8 @@ import Competences from './pages/Competences';
 import Experiences from './pages/Experiences';
 import Contact from './pages/Contact';
 import Admin from './pages/Admin';
+import Login from './pages/Login';
+import Register from './pages/Register';
 import NotFound from './pages/NotFound';
 
 export const router = createBrowserRouter([
@@ -37,6 +39,14 @@ export const router = createBrowserRouter([
       {
         path: 'admin',
         element: <Admin />,
+      },
+      {
+        path: 'login',
+        element: <Login />,
+      },
+      {
+        path: 'register',
+        element: <Register />,
       }
     ],
   }
