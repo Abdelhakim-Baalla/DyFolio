@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUserTie, faSun, faMoon } from '@fortawesome/free-solid-svg-icons'
+import { faUserTie, faSun, faMoon, faBars, faXmark, faHome, faCode, faBriefcase, faGraduationCap, faEnvelope, faUser, faArrowRightToBracket } from '@fortawesome/free-solid-svg-icons'
 import { useTheme } from '../contexts/ThemeContext'
 
 export default function Navigation() {
@@ -51,8 +51,31 @@ export default function Navigation() {
             </div>
           </div>
 
-          {/* Right side: admin + theme toggle */}
+          {/* Right side: auth + admin + theme toggle */}
           <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 pr-4 text-sm">
+              <div className="flex items-center gap-2">
+                <FontAwesomeIcon icon={faUser} aria-hidden={true} />
+                 <Link
+                to="/login"
+                className={`px-3 py-1 text-sm ${theme.centerInactive}`}
+              >
+                Connexion
+              </Link>
+              </div>
+
+              <span className="text-gray-400">|</span>
+              <div className="flex items-center gap-2">
+                <FontAwesomeIcon icon={faArrowRightToBracket} aria-hidden={true} />
+                <Link
+                  to="/register"
+                  className={`px-3 py-1 text-sm ${theme.centerInactive}`}
+                >
+                  Inscription
+              </Link>
+              </div>
+            </div> 
+
             <Link
               to="/admin"
               className={`px-3 py-1 text-sm flex items-center gap-2 ${theme.admin}`}
