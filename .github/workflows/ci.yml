@@ -29,20 +29,25 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
+          cache-dependency-path: |
+            Server/package-lock.json
+            DyFolio-Front/package-lock.json
 
-      - name: Install dependencies
+      - name: Install Server dependencies
+        working-directory: Server
         run: npm ci
 
-      - name: Run ESLint (if configured)
-        run: |
-          if [ -f ".eslintrc.json" ] || [ -f ".eslintrc.js" ]; then
-            npm run lint
-          else
-            echo "No ESLint configuration found, skipping..."
-          fi
+      - name: Install Frontend dependencies
+        working-directory: DyFolio-Front
+        run: npm ci
+
+      - name: Run frontend ESLint
+        working-directory: DyFolio-Front
+        run: npm run lint
         continue-on-error: true
 
       - name: Check TypeScript compilation
+        working-directory: Server
         run: npm run build
 
   test:
@@ -69,11 +74,16 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
+          cache-dependency-path: |
+            Server/package-lock.json
+            DyFolio-Front/package-lock.json
 
-      - name: Install dependencies
+      - name: Install Server dependencies
+        working-directory: Server
         run: npm ci
 
       - name: Run tests with coverage
+        working-directory: Server
         run: npm test
         env:
           MONGODB_URI: mongodb://localhost:27017/dyfolio-test
@@ -83,7 +93,7 @@ jobs:
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
-          file: ./coverage/coverage-final.json
+          files: Server/coverage/coverage-final.json
           flags: unittests
           name: codecov-umbrella
           fail_ci_if_error: false
@@ -94,8 +104,8 @@ jobs:
         with:
           name: test-results
           path: |
-            coverage/
-            logs/
+            Server/coverage/
+            Server/logs/
 
   build:
     name: Build
@@ -111,18 +121,38 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
+          cache-dependency-path: |
+            Server/package-lock.json
+            DyFolio-Front/package-lock.json
 
-      - name: Install dependencies
+      - name: Install Server dependencies
+        working-directory: Server
         run: npm ci
 
       - name: Build TypeScript
+        working-directory: Server
         run: npm run build
 
-      - name: Archive build artifacts
+      - name: Archive server build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: dist
-          path: dist/
+          name: server-dist
+          path: Server/dist/
+          retention-days: 7
+
+      - name: Install Frontend dependencies
+        working-directory: DyFolio-Front
+        run: npm ci
+
+      - name: Build Frontend
+        working-directory: DyFolio-Front
+        run: npm run build
+
+      - name: Archive frontend build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: DyFolio-Front/dist/
           retention-days: 7
 
   docker:
@@ -157,7 +187,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: ./Server
+          file: ./Server/Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -181,21 +212,43 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
+          cache-dependency-path: |
+            Server/package-lock.json
+            DyFolio-Front/package-lock.json
 
-      - name: Install dependencies
+      - name: Install Server dependencies
+        working-directory: Server
         run: npm ci
 
-      - name: Run npm audit
+      - name: Run npm audit (Server)
+        working-directory: Server
         run: npm audit --audit-level=moderate
         continue-on-error: true
 
-      - name: Run Snyk security scan
+      - name: Install Frontend dependencies
+        working-directory: DyFolio-Front
+        run: npm ci
+
+      - name: Run npm audit (Frontend)
+        working-directory: DyFolio-Front
+        run: npm audit --audit-level=moderate
+        continue-on-error: true
+
+      - name: Run Snyk security scan (Server)
         uses: snyk/actions/node@master
         continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          args: --severity-threshold=high
+          args: --severity-threshold=high --file=Server/package.json --package-manager=npm --project-name=dyfolio-server
+
+      - name: Run Snyk security scan (Frontend)
+        uses: snyk/actions/node@master
+        continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high --file=DyFolio-Front/package.json --package-manager=npm --project-name=dyfolio-frontend
 
   notify:
     name: Notify
