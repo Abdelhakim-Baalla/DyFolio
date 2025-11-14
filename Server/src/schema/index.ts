@@ -61,7 +61,7 @@ export const typeDefs = gql`
   }
 
   type Query {
-    getPortfolio: Portfolio!
+  getPortfolio(username: String): Portfolio!
     getProfil: Profil!
     getProjets: [Projet!]!
     getProjet(id: ID!): Projet
