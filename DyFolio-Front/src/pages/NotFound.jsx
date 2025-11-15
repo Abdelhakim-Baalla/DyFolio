@@ -1,6 +1,8 @@
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 export default function NotFound() {
+  const { username } = useParams();
+  const backPath = username ? `/${username}` : '/';
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="text-center px-4">
@@ -12,7 +14,7 @@ export default function NotFound() {
           Désolé, la page que vous recherchez n'existe pas.
         </p>
         <Link
-          to="/"
+          to={backPath}
           className="inline-block px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
         >
           Retour à l'accueil

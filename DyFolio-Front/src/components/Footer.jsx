@@ -1,13 +1,15 @@
-import { Outlet } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGithub, faLinkedin, faTwitter } from '@fortawesome/free-brands-svg-icons'
-import { faHeart } from '@fortawesome/free-solid-svg-icons'
 import { useTheme } from '../contexts/ThemeContext'
 
 export default function Footer() {
   
 
   const { dark } = useTheme();
+  const { username } = useParams();
+  const basePath = username ? `/${username}` : '';
+  const hasUsername = Boolean(username);
 
   const theme = {
     brand: dark ? 'text-gray-200' : 'text-black',
@@ -37,10 +39,37 @@ export default function Footer() {
           <div className="flex flex-col">
             <h4 className={`text-lg font-semibold mb-4 ${theme.heading}`}>Navigation</h4>
             <nav className="flex flex-col gap-3 text-sm text-center md:text-left">
-              <a href="#" className={`py-1 ${theme.link} transition-colors duration-300`}>Accueil</a>
-              <a href="#" className={`py-1 ${theme.link} transition-colors duration-300`}>Projets</a>
-              <a href="#" className={`py-1 ${theme.link} transition-colors duration-300`}>Compétences</a>
-              <a href="#" className={`py-1 ${theme.link} transition-colors duration-300`}>Contact</a>
+              {hasUsername ? (
+                <>
+                  <Link to={basePath || '/'} className={`py-1 ${theme.link} transition-colors duration-300`}>
+                    Accueil
+                  </Link>
+                  <Link to={`${basePath}/projets`} className={`py-1 ${theme.link} transition-colors duration-300`}>
+                    Projets
+                  </Link>
+                  <Link to={`${basePath}/competences`} className={`py-1 ${theme.link} transition-colors duration-300`}>
+                    Compétences
+                  </Link>
+                  <Link to={`${basePath}/contact`} className={`py-1 ${theme.link} transition-colors duration-300`}>
+                    Contact
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link to="/" className={`py-1 ${theme.link} transition-colors duration-300`}>
+                    Accueil
+                  </Link>
+                  <a href="#fonctionnalites" className={`py-1 ${theme.link} transition-colors duration-300`}>
+                    Fonctionnalités
+                  </a>
+                  <a href="#inscription" className={`py-1 ${theme.link} transition-colors duration-300`}>
+                    Inscription
+                  </a>
+                  <Link to="/contact" className={`py-1 ${theme.link} transition-colors duration-300`}>
+                    Contact
+                  </Link>
+                </>
+              )}
             </nav>
           </div>
 

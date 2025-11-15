@@ -61,7 +61,7 @@ export const typeDefs = gql`
   }
 
   type Query {
-    getPortfolio: Portfolio!
+  getPortfolio(username: String): Portfolio!
     getProfil: Profil!
     getProjets: [Projet!]!
     getProjet(id: ID!): Projet
@@ -163,6 +163,13 @@ export const typeDefs = gql`
     competences: [ID!]
   }
 
+  input SendContactEmailInput {
+    username: String!
+    nom: String!
+    email: String!
+    message: String!
+  }
+
   type Mutation {
     login(username: String!, password: String!): AuthPayload!
     updateProfil(input: UpdateProfilInput!): Profil!
@@ -176,5 +183,6 @@ export const typeDefs = gql`
     createExperience(input: CreateExperienceInput!): Experience!
     updateExperience(id: ID!, input: UpdateExperienceInput!): Experience!
     deleteExperience(id: ID!): Boolean!
+    sendContactEmail(input: SendContactEmailInput!): Boolean!
   }
 `;

@@ -1,11 +1,13 @@
-import { useState, useEffect } from 'react';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link, useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUserTie, faSun, faMoon, faBars, faXmark, faHome, faCode, faBriefcase, faGraduationCap, faEnvelope, faUser, faArrowRightToBracket } from '@fortawesome/free-solid-svg-icons'
+import { faUserTie, faSun, faMoon, faUser, faArrowRightToBracket } from '@fortawesome/free-solid-svg-icons'
 import { useTheme } from '../contexts/ThemeContext'
 
 export default function Navigation() {
   const { dark, toggle } = useTheme();
+  const { username } = useParams();
+  const basePath = username ? `/${username}` : '';
+  const hasUsername = Boolean(username);
 
   const theme = {
     centerActive: dark ? 'text-sky-400 border-sky-400' : 'text-sky-600 border-sky-600',
@@ -24,7 +26,7 @@ export default function Navigation() {
         <div className="flex items-center h-16">
           {/* Logo / brand */}
           <div className="flex-shrink-0 pr-4">
-            <Link to="/" className={`text-lg font-semibold tracking-wide ${dark ? 'text-gray-100' : 'text-gray-900'} flex items-center gap-2`}>
+            <Link to={basePath || '/'} className={`text-lg font-semibold tracking-wide ${dark ? 'text-gray-100' : 'text-gray-900'} flex items-center gap-2`}>
               <img src="../../DyFolio-icon.png" alt="DyFolio logo" className="h-8 w-8" />
               DyFolio
             </Link>
@@ -33,21 +35,40 @@ export default function Navigation() {
           {/* Center links */}
           <div className="flex-1 flex justify-center">
             <div className="flex items-end gap-8">
-              <NavLink to="/" className={centerLinkClass} end>
-                Accueil
-              </NavLink>
-              <NavLink to="/projects" className={centerLinkClass}>
-                Projets
-              </NavLink>
-              <NavLink to="/competences" className={centerLinkClass}>
-                Compétences
-              </NavLink>
-              <NavLink to="/experiences" className={centerLinkClass}>
-                Expériences
-              </NavLink>
-              <NavLink to="/contact" className={centerLinkClass}>
-                Contact
-              </NavLink>
+              {hasUsername ? (
+                <>
+                  <NavLink to={basePath || '/'} className={centerLinkClass} end>
+                    Accueil
+                  </NavLink>
+                  <NavLink to={`${basePath}/projets`} className={centerLinkClass}>
+                    Projets
+                  </NavLink>
+                  <NavLink to={`${basePath}/competences`} className={centerLinkClass}>
+                    Compétences
+                  </NavLink>
+                  <NavLink to={`${basePath}/experiences`} className={centerLinkClass}>
+                    Expériences
+                  </NavLink>
+                  <NavLink to={`${basePath}/contact`} className={centerLinkClass}>
+                    Contact
+                  </NavLink>
+                </>
+              ) : (
+                <>
+                  <NavLink to="/" className={centerLinkClass} end>
+                    Accueil
+                  </NavLink>
+                  <a href="#fonctionnalites" className={`pb-3 px-2 text-sm font-medium transition-colors ${theme.centerInactive}`}>
+                    Fonctionnalités
+                  </a>
+                  <a href="#inscription" className={`pb-3 px-2 text-sm font-medium transition-colors ${theme.centerInactive}`}>
+                    Inscription
+                  </a>
+                  <Link to="/contact" className={`pb-3 px-2 text-sm font-medium transition-colors ${theme.centerInactive}`}>
+                    Contact
+                  </Link>
+                </>
+              )}
             </div>
           </div>
 
@@ -57,7 +78,7 @@ export default function Navigation() {
               <div className="flex items-center gap-2">
                 <FontAwesomeIcon icon={faUser} aria-hidden={true} />
                  <Link
-                to="/login"
+                to={`${basePath}/login`}
                 className={`px-3 py-1 text-sm ${theme.centerInactive}`}
               >
                 Connexion
@@ -68,7 +89,7 @@ export default function Navigation() {
               <div className="flex items-center gap-2">
                 <FontAwesomeIcon icon={faArrowRightToBracket} aria-hidden={true} />
                 <Link
-                  to="/register"
+                  to={`${basePath}/register`}
                   className={`px-3 py-1 text-sm ${theme.centerInactive}`}
                 >
                   Inscription
@@ -77,7 +98,7 @@ export default function Navigation() {
             </div> 
 
             <Link
-              to="/admin"
+              to={`${basePath}/admin`}
               className={`px-3 py-1 text-sm flex items-center gap-2 ${theme.admin}`}
               aria-label="Admin"
             >

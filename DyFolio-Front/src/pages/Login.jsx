@@ -1,11 +1,19 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 export default function Login() {
   const [formData, setFormData] = useState({
     email: '',
     motDePasse: ''
   });
+  const { username } = useParams();
+  const basePath = username ? `/${username}` : '';
+  const buildPath = (suffix = '') => {
+    if (!suffix) {
+      return basePath || '/';
+    }
+    return `${basePath}${suffix}`;
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -76,7 +84,7 @@ export default function Login() {
             <p className="text-slate-400">
               Pas encore de compte ?{' '}
               <Link
-                to="/register"
+                to={buildPath('/register')}
                 className="text-[#37c9ff] hover:text-[#2b9cff] font-medium transition-colors"
               >
                 S'inscrire

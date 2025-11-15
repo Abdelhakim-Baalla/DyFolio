@@ -255,24 +255,16 @@ export const resolvers = {
         throw new Error('Erreur interne lors de la récupération de l\'expérience');
       }
     },
-    getPortfolio: async (_parent: any, _args: any, context: any) => {
+    getPortfolio: async (_parent: any, args: any, context: any) => {
       try {
         const Profil = Models.Profil;
         const Projet = Models.Projet;
         const Competence = Models.Competence;
         const Experience = Models.Experience;
+        const Utilisateur = Models.Utilisateur;
 
-        const payload = (context && (context.user || context.utilisateur)) || null;
-        const utilisateurId = payload && (payload.id || payload._id || payload.userId || payload.utilisateurId);
-
-        let profil = null;
-        if (utilisateurId) {
-          profil = await Profil.findOne({ utilisateur: utilisateurId }).lean();
-        }
-
-        if (!profil) {
-          profil = await Profil.findOne({}).lean();
-        }
+  const requestedUsername = (args && typeof args.username === 'string') ? args.username.trim() : '';
+  const normalizedUsername = requestedUsername ? requestedUsername.toLowerCase() : '';
 
         const defaultProfil = {
           nom: '',
@@ -284,17 +276,50 @@ export const resolvers = {
           localisation: '',
         };
 
+        const emptyPortfolio = {
+          profil: defaultProfil,
+          projets: [],
+          competences: [],
+          experiences: [],
+        };
+
+        const payload = (context && (context.user || context.utilisateur)) || null;
+        const utilisateurId = payload && (payload.id || payload._id || payload.userId || payload.utilisateurId);
+
+        let ownerId = null;
+
+        if (requestedUsername) {
+          const userDoc = await Utilisateur.findOne({ username: { $regex: new RegExp(`^${normalizedUsername}$`, 'i') } }).lean();
+          if (userDoc) {
+            ownerId = userDoc._id;
+          } else {
+            // Utilisateur inconnu : renvoyer un portfolio vide
+            return emptyPortfolio;
+          }
+        }
+
+        if (!ownerId && utilisateurId) {
+          ownerId = utilisateurId;
+        }
+
+        let profil = null;
+        if (ownerId) {
+          profil = await Profil.findOne({ utilisateur: ownerId }).lean();
+        }
+
+        if (!profil && !requestedUsername) {
+          profil = await Profil.findOne({}).lean();
+          if (profil && profil.utilisateur) {
+            ownerId = profil.utilisateur;
+          }
+        }
+
         if (!profil) {
-          return {
-            profil: defaultProfil,
-            projets: [],
-            competences: [],
-            experiences: [],
-          };
+          return emptyPortfolio;
         }
 
         // Determine ownerId deterministically
-        const ownerId = profil.utilisateur ? profil.utilisateur : (utilisateurId || null);
+        ownerId = profil.utilisateur ? profil.utilisateur : ownerId;
 
         const [projets, competences, experiences] = await Promise.all([
           ownerId ? Projet.find({ utilisateur: ownerId }).populate('competences', 'nom').lean() : [],
@@ -855,6 +880,28 @@ export const resolvers = {
       } catch (err: any) {
         console.error('Erreur deleteExperience resolver:', err?.message || err);
         throw new Error(err.message || 'Erreur lors de la suppression de l\'expérience');
+      }
+    },
+
+    sendContactEmail: async (_parent: any, args: any) => {
+      try {
+        const { username, nom, email, message } = args.input;
+        const Utilisateur = Models.Utilisateur;
+
+        // Trouver l'utilisateur propriétaire du portfolio par son username
+        const owner = await Utilisateur.findOne({ username });
+        if (!owner) {
+          throw new Error('Utilisateur non trouvé');
+        }
+
+        // Envoyer l'email au propriétaire
+        const emailService = require('../utils/emailService');
+        await emailService.sendContactEmail(owner.email, nom, email, message);
+
+        return true;
+      } catch (err: any) {
+        console.error('Erreur sendContactEmail resolver:', err?.message || err);
+        throw new Error(err.message || 'Erreur lors de l\'envoi du message');
       }
     },
   },
