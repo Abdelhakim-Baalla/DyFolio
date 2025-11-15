@@ -1,8 +1,9 @@
 import { useParams, Navigate } from 'react-router-dom';
-import { useQuery } from '@apollo/client/react';
+import { useQuery, useMutation } from '@apollo/client/react';
 import { useState, useEffect } from 'react';
 import { Mail, User, MessageSquare, Send, Sparkles, MapPin, Phone, Linkedin, Github, Globe, CheckCircle, AlertCircle } from 'lucide-react';
 import { GET_PORTFOLIO } from '../graphql/queries/getPortfolio';
+import { SEND_CONTACT_EMAIL } from '../graphql/mutations/sendContactEmail';
 
 const GlassCard = ({ children, className = '', delay = 0 }) => (
   <div
@@ -50,6 +51,8 @@ export default function Contact() {
   const profil = data?.getPortfolio?.profil;
   const fullName = [profil?.prenom, profil?.nom].filter(Boolean).join(' ').trim();
 
+  // Mutation pour envoyer l'email
+  const [sendContactEmail] = useMutation(SEND_CONTACT_EMAIL);
 
   const userLocation = profil?.localisation?.trim();
   
@@ -145,8 +148,17 @@ export default function Contact() {
     setSubmitStatus(null);
 
     try {
-      // Simuler l'envoi (remplacer par votre API)
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Envoyer l'email via la mutation GraphQL
+      await sendContactEmail({
+        variables: {
+          input: {
+            username: routeUsername,
+            nom: formData.nom.trim(),
+            email: formData.email.trim(),
+            message: formData.message.trim(),
+          }
+        }
+      });
       
       // Succès
       setSubmitStatus('success');
@@ -155,6 +167,7 @@ export default function Contact() {
       // Reset success message after 5 seconds
       setTimeout(() => setSubmitStatus(null), 5000);
     } catch (err) {
+      console.error('Erreur lors de l\'envoi du message:', err);
       setSubmitStatus('error');
       setTimeout(() => setSubmitStatus(null), 5000);
     } finally {
