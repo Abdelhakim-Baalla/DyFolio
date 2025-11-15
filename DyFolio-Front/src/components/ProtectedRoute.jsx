@@ -1,8 +1,10 @@
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate, useLocation, useParams } from 'react-router-dom';
 
 export default function ProtectedRoute({ children }) {
   const { isAuthenticated, loading } = useAuth();
   const location = useLocation();
+  const { username } = useParams();
+  const loginPath = username ? `/${username}/login` : '/login';
 
   if (loading) {
     return (
@@ -14,7 +16,7 @@ export default function ProtectedRoute({ children }) {
 
   if (!isAuthenticated) {
     // Redirige vers la page de login en sauvegardant la route demandée
-    return <Navigate to="/login" state={{ from: location }} replace />;
+    return <Navigate to={loginPath} state={{ from: location }} replace />;
   }
 
   return children;
