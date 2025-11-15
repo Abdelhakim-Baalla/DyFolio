@@ -37,6 +37,10 @@ export const router = createBrowserRouter([
         path: 'admin',
         element: <Admin />,
       },
+      {
+        path: '404',
+        element: <NotFound />,
+      },
     ],
   },
   {
@@ -75,7 +79,15 @@ export const router = createBrowserRouter([
       {
         path: 'register',
         element: <Register />,
+      },
+      {
+        path: '*',
+        element: <NotFound />,
       }
     ],
+  },
+  {
+    path: '*',
+    element: <NotFound />,
   }
 ]);
