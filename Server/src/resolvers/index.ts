@@ -882,5 +882,27 @@ export const resolvers = {
         throw new Error(err.message || 'Erreur lors de la suppression de l\'expérience');
       }
     },
+
+    sendContactEmail: async (_parent: any, args: any) => {
+      try {
+        const { username, nom, email, message } = args.input;
+        const Utilisateur = Models.Utilisateur;
+
+        // Trouver l'utilisateur propriétaire du portfolio par son username
+        const owner = await Utilisateur.findOne({ username });
+        if (!owner) {
+          throw new Error('Utilisateur non trouvé');
+        }
+
+        // Envoyer l'email au propriétaire
+        const emailService = require('../utils/emailService');
+        await emailService.sendContactEmail(owner.email, nom, email, message);
+
+        return true;
+      } catch (err: any) {
+        console.error('Erreur sendContactEmail resolver:', err?.message || err);
+        throw new Error(err.message || 'Erreur lors de l\'envoi du message');
+      }
+    },
   },
 };
