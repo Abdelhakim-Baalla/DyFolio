@@ -23,6 +23,15 @@ export const GET_PORTFOLIO = gql`
           nom
         }
       }
+      competences {
+        id
+        nom
+        niveau
+        categorie {
+          id
+          nom
+        }
+      }
     }
   }
 `;
