@@ -78,85 +78,29 @@ Ceci est un message automatique depuis votre portfolio DyFolio.
         }
         
         body {
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+          font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
           line-height: 1.6;
-          background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+          background: #04060B;
           padding: 40px 20px;
           min-height: 100vh;
         }
         
         .container {
-          max-width: 700px;
+          max-width: 650px;
           margin: 0 auto;
           position: relative;
         }
         
-        /* Background Effects - More Visible */
-        .bg-effect {
-          position: fixed;
-          border-radius: 50%;
-          filter: blur(100px);
-          opacity: 0.6;
-          pointer-events: none;
-          z-index: 0;
-        }
-        
-        .bg-effect-1 {
-          top: 5%;
-          left: -5%;
-          width: 400px;
-          height: 400px;
-          background: radial-gradient(circle, #3b82f6 0%, #2563eb 100%);
-          animation: float1 8s ease-in-out infinite;
-        }
-        
-        .bg-effect-2 {
-          top: 40%;
-          right: -5%;
-          width: 350px;
-          height: 350px;
-          background: radial-gradient(circle, #06b6d4 0%, #0891b2 100%);
-          animation: float2 10s ease-in-out infinite;
-        }
-        
-        .bg-effect-3 {
-          bottom: 10%;
-          left: 40%;
-          width: 300px;
-          height: 300px;
-          background: radial-gradient(circle, #8b5cf6 0%, #7c3aed 100%);
-          animation: float3 12s ease-in-out infinite;
-        }
-        
-        @keyframes float1 {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          50% { transform: translate(30px, -30px) scale(1.1); }
-        }
-        
-        @keyframes float2 {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          50% { transform: translate(-30px, 30px) scale(1.15); }
-        }
-        
-        @keyframes float3 {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          50% { transform: translate(20px, -20px) scale(1.08); }
-        }
-        
-        /* Glass Card - More Visible */
+        /* Glass Card - Dark Mode Style */
         .glass-card {
-          background: rgba(255, 255, 255, 0.95);
-          backdrop-filter: blur(30px);
-          border: 2px solid rgba(255, 255, 255, 1);
+          background: #0F1729;
+          backdrop-filter: blur(18px);
+          border: 1px solid rgba(220, 235, 255, 0.08);
           border-radius: 24px;
-          padding: 50px;
-          box-shadow: 
-            0 30px 80px rgba(0, 0, 0, 0.4),
-            0 0 0 1px rgba(255, 255, 255, 0.2) inset,
-            0 0 100px rgba(59, 130, 246, 0.2);
+          padding: 48px;
+          box-shadow: 0 26px 48px -28px rgba(0, 0, 0, 0.5);
           position: relative;
           overflow: hidden;
-          z-index: 1;
         }
         
         .glass-card::before {
@@ -165,345 +109,169 @@ Ceci est un message automatique depuis votre portfolio DyFolio.
           top: 0;
           left: 0;
           right: 0;
-          height: 6px;
-          background: linear-gradient(90deg, 
-            #3b82f6 0%, 
-            #06b6d4 25%, 
-            #8b5cf6 50%, 
-            #06b6d4 75%, 
-            #3b82f6 100%);
-          background-size: 200% 100%;
-          animation: shimmer 3s linear infinite;
+          height: 2px;
+          background: linear-gradient(90deg, transparent, #4CC9FF, transparent);
+          opacity: 0.5;
         }
         
-        @keyframes shimmer {
-          0% { background-position: 200% 0; }
-          100% { background-position: -200% 0; }
-        }
-        
-        .glass-card::after {
-          content: '';
-          position: absolute;
-          top: -50%;
-          left: -50%;
-          width: 200%;
-          height: 200%;
-          background: radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, transparent 70%);
-          animation: rotate 20s linear infinite;
-          pointer-events: none;
-        }
-        
-        @keyframes rotate {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-        
-        /* Header - More Vibrant */
+        /* Header */
         .header {
           text-align: center;
-          margin-bottom: 45px;
-          padding-bottom: 35px;
-          border-bottom: 3px solid transparent;
-          background: linear-gradient(white, white) padding-box,
-                      linear-gradient(90deg, #3b82f6, #06b6d4, #8b5cf6) border-box;
-          border-image: linear-gradient(90deg, #3b82f6, #06b6d4, #8b5cf6) 1;
+          margin-bottom: 40px;
+          padding-bottom: 32px;
+          border-bottom: 1px solid rgba(220, 235, 255, 0.08);
         }
         
         .logo {
-          font-size: 48px;
-          font-weight: 800;
-          background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 50%, #8b5cf6 100%);
+          font-size: 32px;
+          font-weight: 700;
+          background: linear-gradient(135deg, #4CC9FF 0%, #2B9CFF 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
-          margin-bottom: 12px;
-          letter-spacing: -2px;
-          text-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
-          animation: glow 2s ease-in-out infinite;
-        }
-        
-        @keyframes glow {
-          0%, 100% { filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.4)); }
-          50% { filter: drop-shadow(0 0 16px rgba(59, 130, 246, 0.6)); }
+          margin-bottom: 8px;
+          letter-spacing: -1px;
         }
         
         .subtitle {
-          color: #64748b;
-          font-size: 15px;
-          font-weight: 600;
-          letter-spacing: 2px;
-          text-transform: uppercase;
+          color: #94a3b8;
+          font-size: 13px;
+          font-weight: 500;
+          letter-spacing: 0.5px;
         }
         
-        /* Title - More Bold */
+        /* Title */
         .title {
-          font-size: 32px;
-          font-weight: 700;
-          color: #0f172a;
-          margin-bottom: 16px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 16px;
-        }
-        
-        .icon {
-          font-size: 40px;
-          filter: drop-shadow(0 4px 12px rgba(59, 130, 246, 0.5));
-          animation: bounce 2s ease-in-out infinite;
-        }
-        
-        @keyframes bounce {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-8px); }
+          font-size: 24px;
+          font-weight: 600;
+          color: #F8FAFC;
+          margin-bottom: 12px;
+          text-align: center;
         }
         
         .timestamp {
-          color: #64748b;
-          font-size: 14px;
-          font-weight: 500;
+          color: #94a3b8;
+          font-size: 13px;
           text-align: center;
-          margin-bottom: 40px;
-          padding: 12px;
-          background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
-          border-radius: 12px;
-          border: 1px solid #cbd5e1;
+          margin-bottom: 32px;
         }
         
-        /* Info Section - More Colorful */
+        /* Info Section */
         .info-grid {
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: 24px;
-          margin-bottom: 35px;
+          gap: 16px;
+          margin-bottom: 32px;
         }
         
         .info-card {
-          background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-          border: 2px solid #3b82f6;
-          border-radius: 20px;
-          padding: 28px;
-          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-          position: relative;
-          overflow: hidden;
-        }
-        
-        .info-card::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 4px;
-          background: linear-gradient(90deg, #3b82f6, #06b6d4, #8b5cf6);
-          background-size: 200% 100%;
-          animation: shimmer 2s linear infinite;
+          background: rgba(76, 201, 255, 0.05);
+          border: 1px solid rgba(220, 235, 255, 0.08);
+          border-radius: 16px;
+          padding: 20px;
+          transition: all 0.3s ease;
         }
         
         .info-card:hover {
-          background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-          border-color: #2563eb;
-          transform: translateY(-5px);
-          box-shadow: 0 20px 40px rgba(59, 130, 246, 0.3);
+          background: rgba(76, 201, 255, 0.08);
+          border-color: rgba(76, 201, 255, 0.2);
+          transform: translateY(-2px);
         }
         
         .info-label {
-          font-size: 12px;
-          font-weight: 700;
-          color: #3b82f6;
+          font-size: 11px;
+          font-weight: 600;
+          color: #4CC9FF;
           text-transform: uppercase;
-          letter-spacing: 1.5px;
-          margin-bottom: 10px;
-          display: flex;
-          align-items: center;
-          gap: 6px;
+          letter-spacing: 1px;
+          margin-bottom: 8px;
         }
         
         .info-value {
-          color: #0f172a;
-          font-size: 18px;
-          font-weight: 600;
+          color: #F8FAFC;
+          font-size: 15px;
+          font-weight: 500;
           word-break: break-word;
-          line-height: 1.4;
         }
         
         .info-value a {
-          color: #3b82f6;
+          color: #4CC9FF;
           text-decoration: none;
-          transition: all 0.3s ease;
-          border-bottom: 2px solid transparent;
+          transition: color 0.3s ease;
         }
         
         .info-value a:hover {
-          color: #2563eb;
-          border-bottom: 2px solid #2563eb;
+          color: #2B9CFF;
         }
         
-        /* Message Box - More Vibrant */
+        /* Message Box */
         .message-section {
-          margin-top: 35px;
+          margin-top: 32px;
         }
         
         .message-label {
-          font-size: 13px;
-          font-weight: 700;
-          color: #3b82f6;
+          font-size: 11px;
+          font-weight: 600;
+          color: #4CC9FF;
           text-transform: uppercase;
-          letter-spacing: 1.5px;
-          margin-bottom: 16px;
-          display: flex;
-          align-items: center;
-          gap: 8px;
+          letter-spacing: 1px;
+          margin-bottom: 12px;
         }
         
         .message-box {
-          background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-          border: 3px solid #3b82f6;
-          border-left: 8px solid #3b82f6;
-          border-radius: 20px;
-          padding: 32px;
-          color: #1e293b;
-          font-size: 16px;
-          line-height: 1.8;
+          background: rgba(15, 23, 41, 0.8);
+          border: 1px solid rgba(220, 235, 255, 0.08);
+          border-left: 3px solid #4CC9FF;
+          border-radius: 12px;
+          padding: 24px;
+          color: #F8FAFC;
+          font-size: 15px;
+          line-height: 1.7;
           white-space: pre-wrap;
           word-wrap: break-word;
-          box-shadow: 
-            0 4px 20px rgba(59, 130, 246, 0.15),
-            0 0 0 1px rgba(59, 130, 246, 0.1) inset;
-          position: relative;
         }
         
-        .message-box::before {
-          content: '"';
-          position: absolute;
-          top: 15px;
-          left: 15px;
-          font-size: 60px;
-          font-weight: 900;
-          color: rgba(59, 130, 246, 0.1);
-          line-height: 1;
-        }
-        
-        .message-box::after {
-          content: '"';
-          position: absolute;
-          bottom: 15px;
-          right: 15px;
-          font-size: 60px;
-          font-weight: 900;
-          color: rgba(59, 130, 246, 0.1);
-          line-height: 1;
-        }
-        
-        /* Action Button - More Eye-Catching */
+        /* Action Button */
         .action-section {
-          margin-top: 40px;
+          margin-top: 32px;
           text-align: center;
         }
         
         .reply-button {
           display: inline-block;
-          background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 50%, #8b5cf6 100%);
-          background-size: 200% 100%;
-          color: #ffffff;
+          background: linear-gradient(135deg, #4CC9FF 0%, #2B9CFF 100%);
+          color: #04060B;
           text-decoration: none;
-          padding: 18px 48px;
-          border-radius: 16px;
-          font-weight: 700;
-          font-size: 16px;
-          text-transform: uppercase;
-          letter-spacing: 1px;
-          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-          box-shadow: 
-            0 8px 30px rgba(59, 130, 246, 0.4),
-            0 0 0 3px rgba(255, 255, 255, 0.5) inset;
-          position: relative;
-          overflow: hidden;
-        }
-        
-        .reply-button::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-          transition: left 0.5s;
+          padding: 14px 32px;
+          border-radius: 12px;
+          font-weight: 600;
+          font-size: 14px;
+          transition: all 0.3s ease;
+          box-shadow: 0 4px 20px rgba(76, 201, 255, 0.3);
         }
         
         .reply-button:hover {
-          transform: translateY(-3px) scale(1.05);
-          box-shadow: 
-            0 12px 40px rgba(59, 130, 246, 0.6),
-            0 0 0 3px rgba(255, 255, 255, 0.5) inset;
-          background-position: 100% 0;
+          transform: translateY(-2px);
+          box-shadow: 0 6px 30px rgba(76, 201, 255, 0.4);
         }
         
-        .reply-button:hover::before {
-          left: 100%;
-        }
-        
-        .reply-button:active {
-          transform: translateY(-1px) scale(1.02);
-        }
-        
-        /* Footer - More Vibrant */
+        /* Footer */
         .footer {
           text-align: center;
-          margin-top: 45px;
-          padding-top: 35px;
-          border-top: 3px solid transparent;
-          background: linear-gradient(white, white) padding-box,
-                      linear-gradient(90deg, #3b82f6, #06b6d4, #8b5cf6) border-box;
-          border-image: linear-gradient(90deg, #3b82f6, #06b6d4, #8b5cf6) 1;
-          color: #64748b;
-          font-size: 13px;
+          margin-top: 40px;
+          padding-top: 32px;
+          border-top: 1px solid rgba(220, 235, 255, 0.08);
+          color: #94a3b8;
+          font-size: 12px;
           line-height: 1.8;
         }
         
         .footer-logo {
-          font-weight: 700;
-          font-size: 16px;
-          background: linear-gradient(135deg, #3b82f6, #06b6d4, #8b5cf6);
+          font-weight: 600;
+          background: linear-gradient(135deg, #4CC9FF, #2B9CFF);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
-        }
-        
-        /* Sparkles decoration - More Visible */
-        .sparkle {
-          display: inline-block;
-          color: #3b82f6;
-          font-size: 20px;
-          margin: 0 8px;
-          animation: sparkle 1.5s ease-in-out infinite;
-          filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.6));
-        }
-        
-        @keyframes sparkle {
-          0%, 100% { 
-            opacity: 0.4; 
-            transform: scale(0.9) rotate(0deg);
-          }
-          50% { 
-            opacity: 1; 
-            transform: scale(1.2) rotate(180deg);
-          }
-        }
-        
-        .badge {
-          display: inline-block;
-          background: linear-gradient(135deg, #3b82f6, #06b6d4);
-          color: white;
-          padding: 6px 16px;
-          border-radius: 20px;
-          font-size: 11px;
-          font-weight: 700;
-          text-transform: uppercase;
-          letter-spacing: 1px;
-          margin-top: 12px;
-          box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
         
         /* Responsive */
@@ -513,57 +281,41 @@ Ceci est un message automatique depuis votre portfolio DyFolio.
           }
           
           .glass-card {
-            padding: 30px;
+            padding: 32px 24px;
             border-radius: 20px;
           }
           
           .info-grid {
             grid-template-columns: 1fr;
-            gap: 16px;
+            gap: 12px;
           }
           
           .title {
-            font-size: 24px;
+            font-size: 20px;
           }
           
           .logo {
-            font-size: 36px;
-          }
-          
-          .icon {
-            font-size: 32px;
-          }
-          
-          .reply-button {
-            padding: 16px 36px;
-            font-size: 14px;
+            font-size: 28px;
           }
         }
       </style>
     </head>
     <body>
-      <!-- Background Effects -->
-      <div class="bg-effect bg-effect-1"></div>
-      <div class="bg-effect bg-effect-2"></div>
-      <div class="bg-effect bg-effect-3"></div>
-      
       <div class="container">
         <div class="glass-card">
           <!-- Header -->
           <div class="header">
-            <div class="logo">✦ DyFolio ✦</div>
+            <div class="logo">DyFolio</div>
             <div class="subtitle">Portfolio Management System</div>
           </div>
           
           <!-- Title -->
           <div class="title">
-            <span class="icon">✨</span>
             Nouveau message de contact
-            <span class="icon">✨</span>
           </div>
           
           <div class="timestamp">
-            📅 ${new Date().toLocaleDateString('fr-FR', { 
+            ${new Date().toLocaleDateString('fr-FR', { 
               weekday: 'long', 
               year: 'numeric', 
               month: 'long', 
@@ -576,12 +328,12 @@ Ceci est un message automatique depuis votre portfolio DyFolio.
           <!-- Info Grid -->
           <div class="info-grid">
             <div class="info-card">
-              <div class="info-label">👤 Expéditeur</div>
+              <div class="info-label">Expéditeur</div>
               <div class="info-value">${senderName}</div>
             </div>
             
             <div class="info-card">
-              <div class="info-label">📧 Adresse Email</div>
+              <div class="info-label">Email</div>
               <div class="info-value">
                 <a href="mailto:${senderEmail}">${senderEmail}</a>
               </div>
@@ -590,25 +342,22 @@ Ceci est un message automatique depuis votre portfolio DyFolio.
           
           <!-- Message -->
           <div class="message-section">
-            <div class="message-label">💬 Message Reçu</div>
+            <div class="message-label">Message</div>
             <div class="message-box">${message}</div>
           </div>
           
           <!-- Action Button -->
           <div class="action-section">
             <a href="mailto:${senderEmail}?subject=Re: Contact depuis DyFolio" class="reply-button">
-              ✉️ Répondre au message
+              Répondre au message
             </a>
           </div>
           
           <!-- Footer -->
           <div class="footer">
-            <div>
-              <span class="sparkle">✦</span>
-              Message reçu via votre portfolio <span class="footer-logo">DyFolio</span>
-              <span class="sparkle">✦</span>
-            </div>
-            <div class="badge">Notification Automatique</div>
+            Message reçu via votre portfolio <span class="footer-logo">DyFolio</span>
+            <br>
+            Ce message a été envoyé automatiquement depuis votre formulaire de contact
           </div>
         </div>
       </div>
