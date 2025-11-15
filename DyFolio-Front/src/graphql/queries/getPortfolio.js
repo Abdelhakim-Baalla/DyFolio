@@ -32,6 +32,14 @@ export const GET_PORTFOLIO = gql`
           nom
         }
       }
+      experiences {
+        id
+        entreprise
+        poste
+        description
+        dateDebut
+        dateFin
+      }
     }
   }
 `;
