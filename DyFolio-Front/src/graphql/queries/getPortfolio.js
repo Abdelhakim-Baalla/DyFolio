@@ -12,6 +12,17 @@ export const GET_PORTFOLIO = gql`
         localisation
         reseauxSociaux
       }
+      projets {
+        id
+        titre
+        description
+        image
+        lienDemo
+        lienCode
+        competences {
+          nom
+        }
+      }
     }
   }
 `;
