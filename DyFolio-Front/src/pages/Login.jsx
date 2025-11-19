@@ -1,11 +1,17 @@
 import { useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function Login() {
   const [formData, setFormData] = useState({
     email: '',
     motDePasse: ''
   });
+  const [error, setError] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { login } = useAuth();
   const { username } = useParams();
   const basePath = username ? `/${username}` : '';
   const buildPath = (suffix = '') => {
@@ -15,9 +21,20 @@ export default function Login() {
     return `${basePath}${suffix}`;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Login:', formData);
+    setError('');
+    setSubmitting(true);
+
+    try {
+      await login({ identifier: formData.email, password: formData.motDePasse });
+      const redirectPath = location.state?.from?.pathname ?? buildPath('/admin');
+      navigate(redirectPath, { replace: true });
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleChange = (e) => {
@@ -72,11 +89,18 @@ export default function Login() {
               />
             </div>
 
+            {error && (
+              <p className="text-sm text-red-400 bg-red-950/40 border border-red-500/30 rounded-lg p-3">
+                {error}
+              </p>
+            )}
+
             <button
               type="submit"
-              className="w-full rounded-xl bg-gradient-to-r from-[#37c9ff] to-[#2b9cff] px-6 py-3 text-base font-semibold text-black shadow-lg shadow-[#2b9cff]/30 transition-transform hover:-translate-y-0.5 hover:scale-[1.02]"
+              disabled={submitting}
+              className="w-full rounded-xl bg-gradient-to-r from-[#37c9ff] to-[#2b9cff] px-6 py-3 text-base font-semibold text-black shadow-lg shadow-[#2b9cff]/30 transition-transform hover:-translate-y-0.5 hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              Se connecter
+              {submitting ? 'Connexion...' : 'Se connecter'}
             </button>
           </form>
 

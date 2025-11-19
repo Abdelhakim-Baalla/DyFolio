@@ -1,14 +1,22 @@
 import { useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function Register() {
   const [formData, setFormData] = useState({
+    username: '',
     nom: '',
     prenom: '',
+    metier: '',
     email: '',
     motDePasse: '',
     confirmPassword: ''
   });
+  const [error, setError] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { register: registerUser } = useAuth();
   const { username } = useParams();
   const basePath = username ? `/${username}` : '';
   const buildPath = (suffix = '') => {
@@ -18,9 +26,32 @@ export default function Register() {
     return `${basePath}${suffix}`;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Register:', formData);
+    setError('');
+
+    if (formData.motDePasse !== formData.confirmPassword) {
+      setError('Les mots de passe ne correspondent pas.');
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      await registerUser({
+        username: formData.username.trim(),
+        email: formData.email.trim(),
+        password: formData.motDePasse,
+        nom: formData.nom.trim(),
+        prenom: formData.prenom.trim(),
+        metier: formData.metier.trim() || 'Administrateur',
+      });
+      const redirectPath = location.state?.from?.pathname ?? buildPath('/admin');
+      navigate(redirectPath, { replace: true });
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleChange = (e) => {
@@ -45,6 +76,21 @@ export default function Register() {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-2 gap-4">
               <div>
+                <label htmlFor="username" className="block text-sm font-medium text-slate-300 mb-2">
+                  Nom d'utilisateur
+                </label>
+                <input
+                  type="text"
+                  id="username"
+                  name="username"
+                  value={formData.username}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 rounded-xl border border-slate-700/70 bg-[#061728]/60 text-white placeholder-slate-400 focus:border-[#2b9cff] focus:outline-none focus:ring-2 focus:ring-[#2b9cff]/20"
+                  placeholder="admin-dyfolio"
+                />
+              </div>
+              <div>
                 <label htmlFor="prenom" className="block text-sm font-medium text-slate-300 mb-2">
                   Prénom
                 </label>
@@ -59,6 +105,9 @@ export default function Register() {
                   placeholder="Jean"
                 />
               </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
               <div>
                 <label htmlFor="nom" className="block text-sm font-medium text-slate-300 mb-2">
                   Nom
@@ -72,6 +121,21 @@ export default function Register() {
                   required
                   className="w-full px-4 py-3 rounded-xl border border-slate-700/70 bg-[#061728]/60 text-white placeholder-slate-400 focus:border-[#2b9cff] focus:outline-none focus:ring-2 focus:ring-[#2b9cff]/20"
                   placeholder="Dupont"
+                />
+              </div>
+              <div>
+                <label htmlFor="metier" className="block text-sm font-medium text-slate-300 mb-2">
+                  Métier
+                </label>
+                <input
+                  type="text"
+                  id="metier"
+                  name="metier"
+                  value={formData.metier}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 rounded-xl border border-slate-700/70 bg-[#061728]/60 text-white placeholder-slate-400 focus:border-[#2b9cff] focus:outline-none focus:ring-2 focus:ring-[#2b9cff]/20"
+                  placeholder="Administrateur"
                 />
               </div>
             </div>
@@ -124,11 +188,18 @@ export default function Register() {
               />
             </div>
 
+            {error && (
+              <p className="text-sm text-red-400 bg-red-950/40 border border-red-500/30 rounded-lg p-3">
+                {error}
+              </p>
+            )}
+
             <button
               type="submit"
-              className="w-full rounded-xl bg-gradient-to-r from-[#37c9ff] to-[#2b9cff] px-6 py-3 text-base font-semibold text-black shadow-lg shadow-[#2b9cff]/30 transition-transform hover:-translate-y-0.5 hover:scale-[1.02]"
+              disabled={submitting}
+              className="w-full rounded-xl bg-gradient-to-r from-[#37c9ff] to-[#2b9cff] px-6 py-3 text-base font-semibold text-black shadow-lg shadow-[#2b9cff]/30 transition-transform hover:-translate-y-0.5 hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              S'inscrire
+              {submitting ? 'Inscription...' : "S'inscrire"}
             </button>
           </form>
 

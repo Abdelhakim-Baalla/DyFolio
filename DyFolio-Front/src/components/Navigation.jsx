@@ -1,10 +1,13 @@
-import { NavLink, Link, useParams } from 'react-router-dom';
+import { NavLink, Link, useParams, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUserTie, faSun, faMoon, faUser, faArrowRightToBracket } from '@fortawesome/free-solid-svg-icons'
+import { faUserTie, faSun, faMoon, faUser, faArrowRightToBracket, faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 import { useTheme } from '../contexts/ThemeContext'
+import { useAuth } from '../contexts/AuthContext'
 
 export default function Navigation() {
   const { dark, toggle } = useTheme();
+  const navigate = useNavigate();
+  const { isAuthenticated, logout } = useAuth();
   const { username } = useParams();
   const basePath = username ? `/${username}` : '';
   const hasUsername = Boolean(username);
@@ -19,6 +22,11 @@ export default function Navigation() {
 
   const centerLinkClass = ({ isActive }) =>
     `pb-3 px-2 text-sm font-medium transition-colors ${isActive ? `border-b-2 ${theme.centerActive}` : theme.centerInactive}`;
+
+  const handleLogout = () => {
+    logout();
+    navigate(basePath || '/', { replace: true });
+  };
 
   return (
     <nav className={`${theme.navBg} w-full shadow-sm flex items-center justify-center`}>
@@ -74,37 +82,52 @@ export default function Navigation() {
 
           {/* Right side: auth + admin + theme toggle */}
           <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 pr-4 text-sm">
-              <div className="flex items-center gap-2">
-                <FontAwesomeIcon icon={faUser} aria-hidden={true} />
-                 <Link
-                to={`${basePath}/login`}
-                className={`px-3 py-1 text-sm ${theme.centerInactive}`}
-              >
-                Connexion
-              </Link>
-              </div>
+            {!hasUsername && (
+              <>
+                {!isAuthenticated ? (
+                  <div className="flex items-center gap-2 pr-4 text-sm">
+                    <div className="flex items-center gap-2">
+                      <FontAwesomeIcon icon={faUser} aria-hidden={true} />
+                      <Link
+                        to={`${basePath}/login`}
+                        className={`px-3 py-1 text-sm ${theme.centerInactive}`}
+                      >
+                        Connexion
+                      </Link>
+                    </div>
 
-              <span className="text-gray-400">|</span>
-              <div className="flex items-center gap-2">
-                <FontAwesomeIcon icon={faArrowRightToBracket} aria-hidden={true} />
-                <Link
-                  to={`${basePath}/register`}
-                  className={`px-3 py-1 text-sm ${theme.centerInactive}`}
-                >
-                  Inscription
-              </Link>
-              </div>
-            </div> 
-
-            <Link
-              to={`${basePath}/admin`}
-              className={`px-3 py-1 text-sm flex items-center gap-2 ${theme.admin}`}
-              aria-label="Admin"
-            >
-              <FontAwesomeIcon icon={faUserTie} aria-hidden={true} />
-              <span>Admin</span>
-            </Link>
+                    <span className="text-gray-400">|</span>
+                    <div className="flex items-center gap-2">
+                      <FontAwesomeIcon icon={faArrowRightToBracket} aria-hidden={true} />
+                      <Link
+                        to={`${basePath}/register`}
+                        className={`px-3 py-1 text-sm ${theme.centerInactive}`}
+                      >
+                        Inscription
+                      </Link>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <Link
+                      to={`${basePath}/admin`}
+                      className={`px-3 py-1 text-sm flex items-center gap-2 ${theme.admin}`}
+                      aria-label="Admin"
+                    >
+                      <FontAwesomeIcon icon={faUserTie} aria-hidden={true} />
+                      <span>Admin</span>
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="px-3 py-1 text-sm flex items-center gap-2 text-red-400 hover:text-red-300"
+                    >
+                      <FontAwesomeIcon icon={faRightFromBracket} aria-hidden={true} />
+                      <span>Déconnexion</span>
+                    </button>
+                  </>
+                )}
+              </>
+            )}
 
             <button
               onClick={toggle}
