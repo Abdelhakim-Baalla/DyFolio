@@ -174,17 +174,31 @@ jobs:
             echo "Error: index.html not found"
             exit 1
           fi
+          if [ -d "index.html" ]; then
+            echo "Error: index.html is a directory!"
+            exit 1
+          fi
           if [ ! -f "vite.config.js" ]; then
             echo "Error: vite.config.js not found"
             exit 1
           fi
+          echo "Checking public directory..."
+          ls -la public/
           echo "All required files present"
+
+      - name: Clean build artifacts
+        working-directory: DyFolio-Front
+        run: |
+          echo "Cleaning previous build artifacts..."
+          rm -rf dist
+          rm -rf node_modules/.vite
+          echo "Clean complete"
 
       - name: Build Frontend
         working-directory: DyFolio-Front
-        run: npm run build
-        env:
-          NODE_ENV: production
+        run: |
+          chmod +x build.sh
+          ./build.sh
 
       - name: Verify Frontend build
         working-directory: DyFolio-Front
