@@ -144,6 +144,15 @@ jobs:
         working-directory: DyFolio-Front
         run: npm ci
 
+      - name: Verify index.html exists
+        working-directory: DyFolio-Front
+        run: |
+          if [ ! -f "index.html" ]; then
+            echo "Error: index.html not found"
+            exit 1
+          fi
+          echo "index.html found and is a file"
+
       - name: Build Frontend
         working-directory: DyFolio-Front
         run: npm run build
