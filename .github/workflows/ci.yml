@@ -120,6 +120,14 @@ jobs:
           fetch-depth: 0
           lfs: true
 
+      - name: Fix index.html if directory
+        run: |
+          if [ -d "DyFolio-Front/index.html" ]; then
+            echo "Fixing index.html directory issue"
+            rm -rf DyFolio-Front/index.html
+            git checkout HEAD -- DyFolio-Front/index.html
+          fi
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
