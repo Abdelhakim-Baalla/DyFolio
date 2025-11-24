@@ -35,8 +35,11 @@ export function AuthProvider({ children }) {
           user: nextUser,
         })
       );
+      // Also store token separately for Apollo Client
+      localStorage.setItem('token', nextToken);
     } else {
       localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem('token');
     }
   }, []);
 

@@ -1,18 +1,11 @@
-const userMod = require('./Utilisateur');
-const profilMod = require('./Profil');
-const experienceMod = require('./Experience');
-const categorieMod = require('./Categorie');
-const competenceMod = require('./Competence');
-const projetMod = require('./Projet');
+import Utilisateur from './Utilisateur';
+import Profil from './Profil';
+import Experience from './Experience';
+import Categorie from './Categorie';
+import Competence from './Competence';
+import Projet from './Projet';
 
-const Utilisateur = userMod && userMod.default ? userMod.default : userMod;
-const Profil = profilMod && profilMod.default ? profilMod.default : profilMod;
-const Experience = experienceMod && experienceMod.default ? experienceMod.default : experienceMod;
-const Categorie = categorieMod && categorieMod.default ? categorieMod.default : categorieMod;
-const Competence = competenceMod && competenceMod.default ? competenceMod.default : competenceMod;
-const Projet = projetMod && projetMod.default ? projetMod.default : projetMod;
-
-module.exports = {
+export {
   Utilisateur,
   Profil,
   Experience,

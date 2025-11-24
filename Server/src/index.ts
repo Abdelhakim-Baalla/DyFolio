@@ -7,6 +7,7 @@ import jwtMiddleware from './middlewares/jwt';
 import authRouter from './routes/auth';
 import logger from './config/logger';
 import { morganStream } from './utils/morganStream';
+import { apiLimiter } from './middlewares/rateLimit';
 const schemaMod = require('./schema');
 const typeDefs = schemaMod.typeDefs;
 const resolversMod = require('./resolvers');
@@ -15,7 +16,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 import connectDB from './config/db';
 connectDB();
-const Models = require('./models/index');
+import * as Models from './models/index';
 const { Utilisateur } = Models;
 const PORT = process.env.PORT || 4000;
 const app = express();
@@ -29,14 +30,17 @@ async function startServer() {
   try {
     await server.start();
     logger.info('Apollo Server démarré avec succès');
-    
+
     // Middlewares
     app.use(cors());
     app.use(express.json());
-    
+
+    // Rate Limiting
+    app.use(apiLimiter);
+
     // Journalisation HTTP avec Morgan
     app.use(morgan('combined', { stream: morganStream }));
-    
+
     // Routes
     app.use('/api/v1', authRouter);
     app.use(jwtMiddleware);

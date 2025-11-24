@@ -1,7 +1,7 @@
-const Models = require('../models');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const Joi = require('joi');
+import * as Models from '../models';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import Joi from 'joi';
 
 // Import des validateurs
 import {
@@ -29,7 +29,7 @@ export const resolvers = {
           throw new Error('Utilisateur non authentifié');
         }
 
-        const profil = await Profil.findOne({ utilisateur: utilisateurId }).lean();
+        const profil: any = await Profil.findOne({ utilisateur: utilisateurId }).lean();
 
         if (!profil) {
           throw new Error('Profil non trouvé pour cet utilisateur');
@@ -46,7 +46,7 @@ export const resolvers = {
         };
       } catch (err: any) {
         console.error('Erreur getProfil:', err?.message || err);
-        if (err instanceof Error && (err.message === 'Utilisateur non authentifié' || err.message.startsWith('Profil non trouvé')) ) {
+        if (err instanceof Error && (err.message === 'Utilisateur non authentifié' || err.message.startsWith('Profil non trouvé'))) {
           throw err;
         }
         throw new Error('Erreur interne lors de la récupération du profil');
@@ -63,7 +63,7 @@ export const resolvers = {
           throw new Error('Utilisateur non authentifié');
         }
 
-        const projets = await Projet.find({ utilisateur: utilisateurId }).populate('competences', 'nom').lean();
+        const projets: any[] = await Projet.find({ utilisateur: utilisateurId }).populate('competences', 'nom').lean();
 
         if (!projets || projets.length === 0) {
           return [];
@@ -100,7 +100,7 @@ export const resolvers = {
           throw new Error('Utilisateur non authentifié');
         }
 
-        const projet = await Projet.findOne({ _id: id, utilisateur: utilisateurId }).populate('competences', 'nom').lean();
+        const projet: any = await Projet.findOne({ _id: id, utilisateur: utilisateurId }).populate('competences', 'nom').lean();
 
         if (!projet) {
           throw new Error('Projet non trouvé');
@@ -136,7 +136,7 @@ export const resolvers = {
           throw new Error('Utilisateur non authentifié');
         }
 
-        const competences = await Competence.find({ utilisateur: utilisateurId }).populate('categorie', 'nom').lean();
+        const competences: any[] = await Competence.find({ utilisateur: utilisateurId }).populate('categorie', 'nom').lean();
 
         if (!competences || competences.length === 0) {
           return [];
@@ -168,7 +168,7 @@ export const resolvers = {
           throw new Error('Utilisateur non authentifié');
         }
 
-        const competence = await Competence.findOne({ _id: id, utilisateur: utilisateurId }).populate('categorie', 'nom').lean();
+        const competence: any = await Competence.findOne({ _id: id, utilisateur: utilisateurId }).populate('categorie', 'nom').lean();
 
         if (!competence) {
           throw new Error('Compétence non trouvée');
@@ -199,7 +199,7 @@ export const resolvers = {
           throw new Error('Utilisateur non authentifié');
         }
 
-        const experiences = await Experience.find({ utilisateur: utilisateurId }).lean();
+        const experiences: any[] = await Experience.find({ utilisateur: utilisateurId }).lean();
 
         if (!experiences || experiences.length === 0) {
           return [];
@@ -233,7 +233,7 @@ export const resolvers = {
           throw new Error('Utilisateur non authentifié');
         }
 
-        const experience = await Experience.findOne({ _id: id, utilisateur: utilisateurId }).lean();
+        const experience: any = await Experience.findOne({ _id: id, utilisateur: utilisateurId }).lean();
 
         if (!experience) {
           throw new Error('Expérience non trouvée');
@@ -263,8 +263,8 @@ export const resolvers = {
         const Experience = Models.Experience;
         const Utilisateur = Models.Utilisateur;
 
-  const requestedUsername = (args && typeof args.username === 'string') ? args.username.trim() : '';
-  const normalizedUsername = requestedUsername ? requestedUsername.toLowerCase() : '';
+        const requestedUsername = (args && typeof args.username === 'string') ? args.username.trim() : '';
+        const normalizedUsername = requestedUsername ? requestedUsername.toLowerCase() : '';
 
         const defaultProfil = {
           nom: '',
@@ -289,7 +289,7 @@ export const resolvers = {
         let ownerId = null;
 
         if (requestedUsername) {
-          const userDoc = await Utilisateur.findOne({ username: { $regex: new RegExp(`^${normalizedUsername}$`, 'i') } }).lean();
+          const userDoc: any = await Utilisateur.findOne({ username: { $regex: new RegExp(`^${normalizedUsername}$`, 'i') } }).lean();
           if (userDoc) {
             ownerId = userDoc._id;
           } else {
@@ -304,11 +304,11 @@ export const resolvers = {
 
         let profil = null;
         if (ownerId) {
-          profil = await Profil.findOne({ utilisateur: ownerId }).lean();
+          profil = await Profil.findOne({ utilisateur: ownerId }).lean() as any;
         }
 
         if (!profil && !requestedUsername) {
-          profil = await Profil.findOne({}).lean();
+          profil = await Profil.findOne({}).lean() as any;
           if (profil && profil.utilisateur) {
             ownerId = profil.utilisateur;
           }
@@ -384,7 +384,7 @@ export const resolvers = {
         const { username, password } = args;
         const Utilisateur = Models.Utilisateur;
 
-        const user = await Utilisateur.findOne({ $or: [{ email: username }, { username: username }] });
+        const user: any = await Utilisateur.findOne({ $or: [{ email: username }, { username: username }] });
         if (!user) {
           throw new Error('Email ou username invalide');
         }
@@ -394,7 +394,7 @@ export const resolvers = {
           throw new Error('Email ou mot de passe invalide');
         }
 
-        const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET || 'secret', { expiresIn: '1h' });
 
         return {
           token,
@@ -419,7 +419,7 @@ export const resolvers = {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const newUser = await Utilisateur.create({
+        const newUser: any = await Utilisateur.create({
           username,
           email,
           password: hashedPassword,
@@ -436,7 +436,7 @@ export const resolvers = {
           localisation: '',
         });
 
-        const token = jwt.sign({ id: newUser._id, email: newUser.email }, process.env.JWT_SECRET, { expiresIn: '7d' });
+        const token = jwt.sign({ id: newUser._id, email: newUser.email }, process.env.JWT_SECRET || 'secret', { expiresIn: '7d' });
 
         return {
           token,
@@ -506,7 +506,7 @@ export const resolvers = {
           utilisateur: utilisateurId,
         });
 
-        const populatedProjet = await Projet.findById(newProjet._id).populate('competences', 'nom').lean();
+        const populatedProjet: any = await Projet.findById(newProjet._id).populate('competences', 'nom').lean();
 
         return {
           id: populatedProjet._id.toString(),
@@ -643,7 +643,7 @@ export const resolvers = {
           utilisateur: utilisateurId,
         });
 
-        const populatedCompetence = await Competence.findById(newCompetence._id).populate('categorie', 'nom').lean();
+        const populatedCompetence: any = await Competence.findById(newCompetence._id).populate('categorie', 'nom').lean();
 
         return {
           id: populatedCompetence._id.toString(),
@@ -687,7 +687,7 @@ export const resolvers = {
           throw new Error('Compétence non trouvée ou vous n\'avez pas les permissions');
         }
 
-        const updatedCompetence = await Competence.findByIdAndUpdate(
+        const updatedCompetence: any = await Competence.findByIdAndUpdate(
           id,
           { ...value },
           { new: true }
@@ -761,7 +761,7 @@ export const resolvers = {
 
         const { poste, entreprise, description, dateDebut, dateFin, lieu, type, competences } = value;
 
-        const newExperience = await Experience.create({
+        const newExperience: any = await Experience.create({
           poste,
           entreprise,
           description: description || '',
