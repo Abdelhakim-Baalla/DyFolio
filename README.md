@@ -1,5 +1,11 @@
 # DyFolio
 
+[Explorateur GraphQL en lecture seule](https://baalla-dyfolio-demo.abdelhakimbaalla50.workers.dev)
+
+Modifier les champs de la requête, puis l’exécuter pour examiner la réponse. Les types proviennent du schéma de l’application et les données sont fictives.
+
+Pour reconstruire la démo depuis la racine du dépôt, exécuter `cd demo && npm ci && npm run build`. Depuis la racine, `npx wrangler deploy` publie les fichiers générés.
+
 [Requêtes GraphQL du portfolio](https://github.com/Abdelhakim-Baalla/DyFolio/blob/main/docs/API_GRAPHQL.md)
 
 [![CI/CD Pipeline](https://github.com/Abdelhakim-Baalla/DyFolio/actions/workflows/ci.yml/badge.svg)](https://github.com/Abdelhakim-Baalla/DyFolio/actions/workflows/ci.yml)

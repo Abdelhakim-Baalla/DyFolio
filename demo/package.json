@@ -1,0 +1,1 @@
+{"name":"dyfolio-query-demo","private":true,"type":"module","scripts":{"build":"node build.mjs"},"dependencies":{"graphql":"16.11.0"},"devDependencies":{"esbuild":"^0.28.2"}}

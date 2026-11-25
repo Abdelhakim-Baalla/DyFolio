@@ -1,0 +1,9 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DyFolio · Explorateur GraphQL</title><script defer src="query.js"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#edf2ef;color:#19342b;font:16px/1.5 Inter,system-ui,sans-serif}main{width:min(1080px,calc(100% - 32px));margin:6vh auto;background:white;border:1px solid #d4ded8;border-radius:16px;padding:clamp(20px,4vw,48px)}h1{font-size:32px;letter-spacing:-.04em;margin:0}a{color:#205d49}section{margin-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:16px}textarea,pre{width:100%;margin:8px 0;min-height:280px;overflow-wrap:anywhere;white-space:pre-wrap;background:#f3f6f4;border:1px solid #ccd8ce;border-radius:6px;padding:12px;color:inherit;font:15px/1.6 ui-monospace,monospace}button{border:0;border-radius:6px;background:#205c43;color:white;font:inherit;padding:9px 18px;cursor:pointer}h2,label{display:block;font-size:16px;font-weight:650;margin:0}@media(max-width:650px){section{grid-template-columns:1fr}textarea,pre{min-height:150px}}
+</style></head><body><main><h1>DyFolio · Explorateur GraphQL</h1><p>Interroger le schéma du portfolio avec un profil, un projet et une expérience fictifs.</p><a href="schema.graphql">Lire le schéma</a> · <a href="https://github.com/Abdelhakim-Baalla/DyFolio">Code source ↗</a><section><div><label for="query">Requête GraphQL</label><textarea id="query" spellcheck="false" maxlength="8000">{
+  getPortfolio {
+    profil { prenom metier }
+    projets { titre technologies }
+  }
+}</textarea><button disabled>Exécuter la requête</button></div><div><h2>Réponse JSON</h2><pre aria-live="polite"></pre></div></section></main></body></html>
