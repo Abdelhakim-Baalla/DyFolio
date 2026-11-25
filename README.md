@@ -1,5 +1,7 @@
 # DyFolio
 
+[Requêtes GraphQL du portfolio](https://github.com/Abdelhakim-Baalla/DyFolio/blob/main/docs/API_GRAPHQL.md)
+
 [![CI/CD Pipeline](https://github.com/Abdelhakim-Baalla/DyFolio/actions/workflows/ci.yml/badge.svg)](https://github.com/Abdelhakim-Baalla/DyFolio/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/Abdelhakim-Baalla/DyFolio/branch/main/graph/badge.svg)](https://codecov.io/gh/Abdelhakim-Baalla/DyFolio)
 [![Docker Image](https://img.shields.io/docker/v/abdelhakimbaalla/dyfolio-api?label=docker&logo=docker)](https://hub.docker.com/r/abdelhakimbaalla/dyfolio-api)
